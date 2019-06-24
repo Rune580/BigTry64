@@ -47,12 +47,15 @@ namespace BigTry64
 
 
 
-
+            Screen screen = new Screen();
             #endregion
 
             async Task MessageReceived(SocketMessage message)
             {
-
+                if (message.Content.StartsWith("debugScreen"))
+                {
+                   await  message.Channel.SendFileAsync(screen.display());
+                }
             }
 
 
