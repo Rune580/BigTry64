@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Discord.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -27,10 +28,6 @@ namespace BigTry64
         public int Health;
         public Inventory Items;
         public string World;
-        public void Move(string _Direction, int _Count = 0)
-        {
-
-        }
     }
     public class Mob : BaseMob
     {
@@ -41,7 +38,18 @@ namespace BigTry64
     }
     public class Player : BaseMob
     {
+        public Player(int _X, int _Y, ulong _UserID, string _World)
+        {
+            X = _X;
+            Y = _Y;
+            UserID = _UserID;
+            World = _World;
+        }
         public ulong UserID;
+        public void Move(string _Direction, int _Count, ulong _ID, SocketMessage message = null)
+        {
+
+        }
     }
     public class Inventory
     {
