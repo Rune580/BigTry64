@@ -11,16 +11,14 @@ namespace BigTry64
         public List<Mob> Mobs;
         public List<World> Worlds;
     }
-    public class World
-    {
-        public string Name;
-        public Block[,] Blocks;
-    }
+
 
 
     public class BaseObject
     {
         //Image to use when representing here
+        public string Name;
+        public string FilePath;
     }
     public class BaseMob : BaseObject
     {
