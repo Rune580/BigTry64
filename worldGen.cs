@@ -12,28 +12,83 @@ namespace BigTry64
         public void genWorld()
         {
             Random rand = new Random();
+            int grassTile = 0;
             int previousGrass = 0;
+            int ppGrass = 0;
             for (int x = 0; x < Blocks.GetLength(0); x++)
             {
-                int grassTile;
-
                 if (x == 0)
                 {
-
-                    grassTile = rand.Next(6, 10);
+                    grassTile = rand.Next(20, 36);
                     previousGrass = grassTile;
                 }
-                else
+                else if(x == 1)
                 {
-                    grassTile = rand.Next(previousGrass-1, previousGrass+1);
-                    while (grassTile > 10)
+                    ppGrass = previousGrass;
+                    grassTile = rand.Next(previousGrass - 1, previousGrass + 2);
+                    while (grassTile > 35)
                     {
                         grassTile--;
                     }
-                    while (grassTile < 5)
+                    while (grassTile < 20)
                     {
                         grassTile++;
                     }
+                    previousGrass = grassTile;
+
+                }
+                else
+                {
+                    int Difference;
+                    int Odds = rand.Next(0,100);
+                    Difference = ppGrass - previousGrass;
+                    ppGrass = previousGrass;
+                    if (Difference == -1)
+                    {
+                        if (Odds > 40)
+                        {
+                            grassTile = previousGrass + 1;
+                        }
+                        else if (Odds > 10)
+                        {
+                            grassTile = previousGrass;
+                        }
+                        else
+                        {
+                            grassTile = previousGrass - 1;
+                        }
+                    }
+                    else if (Difference == 0)
+                    {
+                        if (Odds > 40)
+                        {
+                            grassTile = previousGrass;
+                        }
+                        else if (Odds > 20)
+                        {
+                            grassTile = previousGrass + 1;
+                        }
+                        else
+                        {
+                            grassTile = previousGrass - 1;
+                        }
+                    }
+                    else
+                    {
+                        if (Odds > 40)
+                        {
+                            grassTile = previousGrass - 1;
+                        }
+                        else if (Odds > 10)
+                        {
+                            grassTile = previousGrass;
+                        }
+                        else
+                        {
+                            grassTile = previousGrass + 1;
+                        }
+                    }
+                    previousGrass = grassTile;
                 }
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
