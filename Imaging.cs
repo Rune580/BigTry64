@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Discord.WebSocket;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -7,8 +8,9 @@ namespace BigTry64
 {
     public static class Screen
     {
-        public static string fullWorld(World world)
+        public static string fullWorld(World world, SocketMessage message)
         {
+            int Percent;
             int totalBlocks = world.Blocks.GetLength(0) * world.Blocks.GetLength(1);
             int blocksDone = 0;
             Bitmap viewFrame;
@@ -33,6 +35,7 @@ namespace BigTry64
                     graphics.DrawImage(block, x*32, y*32);
                     blocksDone++;
                     Console.WriteLine($"{blocksDone} Tiles out of {totalBlocks} rendered. {(int)(((float)x / (float)world.Blocks.GetLength(0)) * 100)}%");
+                    Percent = (int)(((float)x / (float)world.Blocks.GetLength(0)) * 10);
                 }
             }
             Console.Clear();

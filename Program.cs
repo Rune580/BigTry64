@@ -56,7 +56,7 @@ namespace BigTry64
             {
                 if (message.Content.StartsWith("showWorld"))
                 {
-                   await message.Channel.SendFileAsync(Screen.fullWorld(game.Worlds[0]));
+                   await message.Channel.SendFileAsync(Screen.fullWorld(game.Worlds[0], message));
                 }
                 else if (message.Content.StartsWith("showScreen"))
                 {
