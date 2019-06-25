@@ -97,15 +97,85 @@ namespace BigTry64
                     {
                         try
                         {
-                            await game.MovePlayer(AuthorID, Direction, int.Parse(TheMessage),  message);
+                            await game.MovePlayer(AuthorID, Direction, int.Parse(TheMessage), message);
                         }
                         catch
                         {
-                            await game.MovePlayer(AuthorID, Direction, 1,  message);
+                            await game.MovePlayer(AuthorID, Direction, 1, message);
                         }
                     }
                 }
-            }
+                else if ((TheMessage.StartsWith("BUP") || TheMessage.StartsWith("BDOWN") || TheMessage.StartsWith("BLEFT") || TheMessage.StartsWith("BRIGHT") || TheMessage.StartsWith("BHERE")))
+                {
+                    string Direction1 = "";
+                    string Direction2 = "";
+                    if (TheMessage.StartsWith("BUP"))
+                    {
+                        Direction1 = "UP";
+                        TheMessage = TheMessage.Remove(0, "BUP".Length);
+                    }
+                    else if (TheMessage.StartsWith("BDOWN"))
+                    {
+                        Direction1 = "DOWN";
+                        TheMessage = TheMessage.Remove(0, "BDOWN".Length);
+                    }
+                    else if (TheMessage.StartsWith("BLEFT"))
+                    {
+                        Direction1 = "LEFT";
+                        TheMessage = TheMessage.Remove(0, "BLEFT".Length);
+                    }
+                    else if (TheMessage.StartsWith("BRIGHT"))
+                    {
+                        Direction1 = "RIGHT";
+                        TheMessage = TheMessage.Remove(0, "BRIGHT".Length);
+                    }
+                    else if (TheMessage.StartsWith("BHERE"))
+                    {
+                        Direction1 = "HERE";
+                        TheMessage = TheMessage.Remove(0, "BHERE".Length);
+                    }
+
+                    try
+                    {
+                        while (TheMessage[0] == ' ')
+                        {
+                            TheMessage = TheMessage.Remove(0, 1);
+                        }
+
+
+                        if (TheMessage.StartsWith("BUP"))
+                        {
+                            Direction2 = "UP";
+                            TheMessage = TheMessage.Remove(0, "BUP".Length);
+                        }
+                        else if (TheMessage.StartsWith("BDOWN"))
+                        {
+                            Direction2 = "DOWN";
+                            TheMessage = TheMessage.Remove(0, "BDOWN".Length);
+                        }
+                        else if (TheMessage.StartsWith("BLEFT"))
+                        {
+                            Direction2 = "LEFT";
+                            TheMessage = TheMessage.Remove(0, "BLEFT".Length);
+                        }
+                        else if (TheMessage.StartsWith("BRIGHT"))
+                        {
+                            Direction2 = "RIGHT";
+                            TheMessage = TheMessage.Remove(0, "BRIGHT".Length);
+                        }
+                        else if (TheMessage.StartsWith("BHERE"))
+                        {
+                            Direction2 = "HERE";
+                            TheMessage = TheMessage.Remove(0, "BHERE".Length);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    await game.BreakBlock(AuthorID, Direction1, Direction2, message);
+                }
+
+                }
 
 
             Client.MessageReceived += MessageReceived;

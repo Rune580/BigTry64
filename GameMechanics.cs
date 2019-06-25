@@ -150,7 +150,102 @@ namespace BigTry64
                 }
             }
         }
-
+        public async Task BreakBlock(ulong ID, string Direction1, string Direction2, SocketMessage message)
+        {
+            Direction1 = Direction1.ToUpper();
+            Direction2 = Direction2.ToUpper();
+            foreach (var player in Players)
+            {
+                if (player.UserID == ID)
+                {
+                    int _X = 0;
+                    int _Y = 0;
+                    if (Direction1 != Direction2)
+                    {
+                        if (Direction1 == "UP")
+                        {
+                            _Y += -1;
+                        }
+                        else if (Direction1 == "DOWN")
+                        {
+                            _Y += 1;
+                        }
+                        else if (Direction1 == "LEFT")
+                        {
+                            _X += -1;
+                        }
+                        else if (Direction1 == "RIGHT")
+                        {
+                            _X += 1;
+                        }
+                        if (Direction2 == "UP")
+                        {
+                            _Y += -1;
+                        }
+                        else if (Direction2 == "DOWN")
+                        {
+                            _Y += 1;
+                        }
+                        else if (Direction2 == "LEFT")
+                        {
+                            _X += -1;
+                        }
+                        else if (Direction2 == "RIGHT")
+                        {
+                            _X += 1;
+                        }
+                    }
+                    foreach (var world in Worlds)
+                    {
+                        if (world.Name == player.World)
+                        {
+                            bool FoundItem = false;
+                            for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                            {
+                                for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                                {
+                                    if (player.Inventory[x,y] != null)
+                                    {
+                                        if (player.Inventory[x, y].Name == world.Blocks[player.X + _X, player.Y + _Y].Name && player.Inventory[x, y].Count != 50)
+                                        {
+                                            player.Inventory[x, y].Count++;
+                                            FoundItem = true;
+                                        }
+                                    }
+                                }
+                            }
+                            if (!FoundItem)
+                            {
+                                for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                                {
+                                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                                    {
+                                        if (player.Inventory[x, y] == null)
+                                        {
+                                            player.Inventory[x, y] = new Item(world.Blocks[player.X + _X, player.Y + _Y], "block");
+                                        }
+                                    }
+                                }
+                            }
+                            world.Blocks[player.X + _X, player.Y + _Y] = new Block(@"images/BT_air.png", "air", false, 60);
+                            foreach (var player2 in Players)
+                            {
+                                if (player2.World == world.Name)
+                                {
+                                    while (!world.Blocks[player2.X, player2.Y + 1].Solid)
+                                    {
+                                        player2.Y++;
+                                    }
+                                }
+                            }
+                            await Display(ID, message);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
     }
 
 
@@ -165,7 +260,7 @@ namespace BigTry64
     {
         public int X, Y;
         public int Health;
-        public List<Item> Inventory = new List<Item>();
+        public Item[,] Inventory = new Item[9,4];
         public string World;
     }
     public class Mob : BaseMob
@@ -186,15 +281,20 @@ namespace BigTry64
             FilePath = _FilePath;
         }
         public ulong UserID;
-        public void Move(string _Direction, int _Count, ulong _ID, SocketMessage message = null)
-        {
-
-        }
     }
 
     public class Item : BaseObject
     {
-
+        public Item(Block _Block, string _Type, int _Count = 1)
+        {
+            Block = _Block;
+            Count = _Count;
+            Type = _Type;
+        }
+        public Block Block;
+        public int Durability;
+        public string Type;
+        public int Count;
     }
     public class Block : BaseObject
     {
