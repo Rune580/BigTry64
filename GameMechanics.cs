@@ -10,6 +10,12 @@ namespace BigTry64
         public List<Mob> Players;
         public List<Mob> Mobs;
         public List<World> Worlds;
+        public Controller()
+        {
+            Players = new List<Mob>();
+            Mobs = new List<Mob>();
+            Worlds = new List<World>();
+        }
     }
 
 
@@ -60,7 +66,7 @@ namespace BigTry64
     }
     public class Block : BaseObject
     {
-        public Block(string _FilePath, string _Name, bool _Solid, string _Text)
+        public Block(string _FilePath, string _Name, bool _Solid, string _Text = "")
         {
             FilePath = _FilePath;
             Name = _Name;

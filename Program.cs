@@ -47,14 +47,20 @@ namespace BigTry64
 
 
 
-            Screen screen = new Screen();
+            Controller game = new Controller();
+            game.Worlds.Add(new World());
+            game.Worlds[0].genWorld();
             #endregion
 
             async Task MessageReceived(SocketMessage message)
             {
-                if (message.Content.StartsWith("debugScreen"))
+                if (message.Content.StartsWith("showWorld"))
                 {
-                   await  message.Channel.SendFileAsync(screen.display());
+                   await message.Channel.SendFileAsync(Screen.fullWorld(game.Worlds[0]));
+                }
+                else if (message.Content.StartsWith("showScreen"))
+                {
+                   await message.Channel.SendFileAsync(Screen.display(game.Worlds[0]));
                 }
             }
 

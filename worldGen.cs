@@ -7,14 +7,13 @@ namespace BigTry64
     public class World
     {
         public string Name;
-        public Block[,] Blocks;
+        public Block[,] Blocks = new Block[200, 150];
 
-        public Block[,] genWorld()
+        public void genWorld()
         {
             Random rand = new Random();
             int previousGrass = 0;
-            Block[,] map = new Block[20, 15];
-            for (int x = 0; x < map.GetLength(0); x++)
+            for (int x = 0; x < Blocks.GetLength(0); x++)
             {
                 int grassTile;
 
@@ -26,7 +25,7 @@ namespace BigTry64
                 }
                 else
                 {
-                    grassTile = rand.Next(previousGrass-1, previousGrass+2);
+                    grassTile = rand.Next(previousGrass-1, previousGrass+1);
                     while (grassTile > 10)
                     {
                         grassTile--;
@@ -36,15 +35,27 @@ namespace BigTry64
                         grassTile++;
                     }
                 }
-                for (int y = 0; y < map.GetLength(1); y++)
+                for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
+                    int dirtTile = rand.Next(grassTile+1, grassTile+4);
                     if (y < grassTile)
                     {
-
+                        Blocks[x, y] = new Block(@"images/BT_air.png", "air", false);
+                    }
+                    else if (y == grassTile)
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_grass.png", "grass", true);
+                    }
+                    else if (y <= dirtTile)
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_dirt.png", "dirt", true);
+                    }
+                    else
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_stone.png", "stone", true);
                     }
                 }
             }
-            return map;
         }
     }
 }
