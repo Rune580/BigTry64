@@ -9,7 +9,8 @@ namespace BigTry64
     {
         public static string fullWorld(World world)
         {
-            int percent = -1;
+            int totalBlocks = world.Blocks.GetLength(0) * world.Blocks.GetLength(1);
+            int blocksDone = 0;
             Bitmap viewFrame;
             Bitmap block;
 
@@ -20,19 +21,20 @@ namespace BigTry64
             var graphics = Graphics.FromImage(finalImage);
 
             graphics.DrawImage(viewFrame, 0, 0);
+
+            Console.Clear();
             for (int x = 0; x < world.Blocks.GetLength(0); x++)
             {
                 for (int y = 0; y < world.Blocks.GetLength(1); y++)
                 {
+                    Console.SetCursorPosition(0, 0);
                     block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
                     graphics.DrawImage(block, x*32, y*32);
-                }
-                if ((int)((float)x / (float)world.Blocks.GetLength(0)) * 100 != percent)
-                {
-                    percent = (int)((float)x / (float)world.Blocks.GetLength(0)) * 100;
-                    Console.WriteLine($"Percentage done creating image: {percent}");
+                    blocksDone++;
+                    Console.WriteLine($"{blocksDone} Tiles out of {totalBlocks} rendered.");
                 }
             }
+            Console.Clear();
             string output = @"images/output.png";
             finalImage.Save(output);
             return output;
