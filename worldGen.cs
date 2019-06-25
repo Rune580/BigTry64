@@ -129,33 +129,28 @@ namespace BigTry64
             // First Pass Generation
             for (int x = 0; x < Blocks.GetLength(0); x++)
             {
+                int Increment = 0;
                 int treeChance = rand.Next(0,100);
                 if (treeChance > 60)
                 {
                     for (int y = 0; y < Blocks.GetLength(1); y++)
                     {
-                        try
+                        if (Blocks[x, y].Name == "grass")
                         {
-                            if (Blocks[x, y].Name == "grass")
+                            int _y = y - 1;
+                            int treeClamp = 20;
+                            treeChance = rand.Next(0, 300);
+                            while (treeChance > 1)
                             {
-                                int _y = y - 1;
-                                int treeClamp = 20;
-                                treeChance = rand.Next(0, 300);
-                                while (treeChance > 1)
-                                {
-                                    Blocks[x, _y] = new Block(@"images/BT_oaklog.png", "oak", false);
-                                    _y--;
-                                    treeChance = rand.Next(0, treeClamp * treeClamp);
-                                    treeClamp--;
-                                }
-                                if (Blocks.GetLength(0) != x)
-                                {
-                                    x += 2;
-                                }
+                                Blocks[x, _y] = new Block(@"images/BT_oaklog.png", "oak", false);
+                                _y--;
+                                treeChance = rand.Next(0, treeClamp * treeClamp);
+                                treeClamp--;
                             }
-                        }
-                        catch
-                        {
+                            if (Blocks.GetLength(0) != x)
+                            {
+                                Increment += 2;
+                            }
                         }
                     }
                 }
@@ -182,6 +177,7 @@ namespace BigTry64
                         Blocks[x, y] = new Block(@"images/BT_orediamond.png", "diamond", true, 35);
                     }
                 }
+                x += Increment;
             }
             genOre(4, 22, @"images/BT_orecoal.png", "coal");
             genOre(3, 40, @"images/BT_oreiron.png", "iron");
