@@ -197,6 +197,7 @@ namespace BigTry64
             genOre(2, 20, @"images/BT_oregold.png", "gold");
             genOre(1, 25, @"images/BT_orediamond.png", "diamond");
             genOre(4, 20, @"images/leaves.png", "leaves", false, "air");
+            removeLeaves();
 
             Console.WriteLine("WorldGen Complete");
         }
@@ -242,6 +243,27 @@ namespace BigTry64
                         {
                         }
 
+                    }
+                }
+            }
+        }
+        public void removeLeaves()
+        {
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    if (Blocks[x,y].Name == "grass")
+                    {
+                        int Temp = rand.Next(4, 6);
+                        for (int i = 1; i < Temp; i++)
+                        {
+                            if (Blocks[x,y-i].Name == "leaves")
+                            {
+                                Blocks[x,y-i] = new Block(@"images/BT_air.png", "air", false, 60);
+                            }
+                        }
+                        break;
                     }
                 }
             }

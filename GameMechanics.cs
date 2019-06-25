@@ -150,6 +150,7 @@ namespace BigTry64
                 }
             }
         }
+
     }
 
 
@@ -164,7 +165,7 @@ namespace BigTry64
     {
         public int X, Y;
         public int Health;
-        public Inventory Items;
+        public List<Item> Inventory = new List<Item>();
         public string World;
     }
     public class Mob : BaseMob
@@ -189,10 +190,6 @@ namespace BigTry64
         {
 
         }
-    }
-    public class Inventory
-    {
-
     }
 
     public class Item : BaseObject
