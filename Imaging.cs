@@ -72,26 +72,38 @@ namespace BigTry64
 
             graphics.DrawImage(viewFrame, 0, 0);
             int x2 = 0;
+            while (_x -10 < 0)
+            {
+                _x++;
+            }
+            while (_x + 10 > world.Blocks.GetLength(0))
+            {
+                _x--;
+            }
+            while (_y - 8 < 0)
+            {
+                _y++;
+            }
+            while (_y + 7 > world.Blocks.GetLength(1))
+            {
+                _y--;
+            }
             for (int x = _x-10; x < _x+10; x++)
             {
                 int y2 = 0;
                 for (int y = _y-8; y < _y+7; y++)
                 {
-                    bool FoundMob = false;
+                    block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
+                    graphics.DrawImage(block, x2 * 32, y2 * 32);
                     foreach (var item in TempMobs)
                     {
                         if (item.X == x && item.Y == y)
                         {
                             block = (Bitmap)Image.FromFile(item.FilePath);
-                            FoundMob = true;
+                            graphics.DrawImage(block, x2 * 32, y2 * 32);
                             break;
                         }
                     }
-                    if (!FoundMob)
-                    {
-                        block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
-                    }
-                    graphics.DrawImage(block, x2 * 32, y2 * 32);
                     y2++;
                 }
                 x2++;

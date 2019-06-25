@@ -70,6 +70,41 @@ namespace BigTry64
                 {
                     game.SpawnPlayer(AuthorID, message);
                 }
+                else if ((TheMessage.StartsWith("UP") || TheMessage.StartsWith("DOWN") || TheMessage.StartsWith("LEFT") || TheMessage.StartsWith("RIGHT")))
+                {
+                    string Direction = "";
+                    if (TheMessage.StartsWith("UP"))
+                    {
+                        Direction = "UP";
+                        TheMessage = TheMessage.Remove(0, "UP".Length);
+                    }
+                    else if (TheMessage.StartsWith("DOWN"))
+                    {
+                        Direction = "DOWN";
+                        TheMessage = TheMessage.Remove(0, "DOWN".Length);
+                    }
+                    else if (TheMessage.StartsWith("LEFT"))
+                    {
+                        Direction = "LEFT";
+                        TheMessage = TheMessage.Remove(0, "LEFT".Length);
+                    }
+                    else if (TheMessage.StartsWith("RIGHT"))
+                    {
+                        Direction = "RIGHT";
+                        TheMessage = TheMessage.Remove(0, "RIGHT".Length);
+                    }
+                    if (TheMessage.Length < 6)
+                    {
+                        try
+                        {
+                            await game.MovePlayer(AuthorID, Direction, int.Parse(TheMessage),  message);
+                        }
+                        catch
+                        {
+                            await game.MovePlayer(AuthorID, Direction, 1,  message);
+                        }
+                    }
+                }
             }
 
 

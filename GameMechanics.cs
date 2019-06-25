@@ -67,6 +67,89 @@ namespace BigTry64
             }
             return false;
         }
+        public async Task MovePlayer(ulong ID, string Direction, int Count, SocketMessage message)
+        {
+            if (!IsIn(ID))
+            {
+                SpawnPlayer(ID, message);
+            }
+            Direction = Direction.ToUpper();
+            foreach (var player in Players)
+            {
+                if (player.UserID == ID)
+                {
+                    int _X = 0;
+                    int _Y = 0;
+                    if (Direction == "UP")
+                    {
+                        _Y = -1;
+                    }
+                    else if (Direction == "DOWN")
+                    {
+                        _Y = 1;
+                    }
+                    else if (Direction == "LEFT")
+                    {
+                        _X = -1;
+                    }
+                    else if (Direction == "RIGHT")
+                    {
+                        _X = 1;
+                    }
+                    foreach (var item in Worlds)
+                    {
+                        if (item.Name == player.World)
+                        {
+                            while (Count > 0)
+                            {
+                                Count--;
+                                int TempX = player.X + _X;
+                                int TempY = player.Y + _Y;
+                                while (TempX < 0)
+                                {
+                                    TempX++;
+                                }
+                                while (TempX >= item.Blocks.GetLength(0))
+                                {
+                                    TempX--;
+                                }
+                                while (TempY < 0)
+                                {
+                                    TempY++;
+                                }
+                                while (TempY >= item.Blocks.GetLength(1))
+                                {
+                                    TempY--;
+                                }
+
+
+                                if (item.Blocks[TempX,TempY].Solid && (Direction == "LEFT" || Direction == "RIGHT"))
+                                {
+                                    if (!item.Blocks[TempX,TempY-1].Solid)
+                                    {
+                                        TempY--;
+                                    }
+                                    else
+                                    {
+                                        TempX -= _X;
+                                        Count = 0;
+                                    }
+                                }
+                                while (!item.Blocks[TempX, TempY+1].Solid)
+                                {
+                                    TempY++;
+                                }
+                                player.X = TempX;
+                                player.Y = TempY;
+                            }
+                            await Display(message.Author.Id, message);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
     }
 
 
