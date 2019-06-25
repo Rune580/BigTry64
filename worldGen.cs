@@ -122,7 +122,7 @@ namespace BigTry64
                     }
                     else
                     {
-                        Blocks[x, y] = new Block(@"images/BT_stone.png", "stone", true, 80);
+                        Blocks[x, y] = new Block(@"images/BT_stone.png", "stone", true, 80, new Block(@"images/BT_darkstone.png", "darkstone", false));
                     }
                 }
             }
@@ -142,7 +142,7 @@ namespace BigTry64
                             treeChance = rand.Next(0, 300);
                             while (treeChance > 1)
                             {
-                                Blocks[x, _y] = new Block(@"images/BT_oaklog.png", "oak", false);
+                                Blocks[x, _y] = new Block(@"images/BT_oaklog.png", "oak", false, _backgroundBlock: new Block(@"images/BT_air.png", "air", false));
                                 _y--;
                                 treeChance = rand.Next(0, treeClamp * treeClamp);
                                 treeClamp--;
@@ -181,8 +181,8 @@ namespace BigTry64
                     {
                         try
                         {
-                            Blocks[x - 1, y - 1] = new Block(@"images/leaves.png", "leaves", false, 50);
-                            Blocks[x + 1, y - 1] = new Block(@"images/leaves.png", "leaves", false, 50);
+                            Blocks[x - 1, y - 1] = new Block(@"images/BT_leaves.png", "leaves", false, 50);
+                            Blocks[x + 1, y - 1] = new Block(@"images/BT_leaves.png", "leaves", false, 50);
                         }
                         catch
                         {
@@ -196,7 +196,7 @@ namespace BigTry64
             genOre(3, 40, @"images/BT_oreiron.png", "iron");
             genOre(2, 20, @"images/BT_oregold.png", "gold");
             genOre(1, 25, @"images/BT_orediamond.png", "diamond");
-            genOre(4, 20, @"images/leaves.png", "leaves", false, "air");
+            genOre(4, 20, @"images/BT_leaves.png", "leaves", false, "air");
             removeLeaves();
 
             Console.WriteLine("WorldGen Complete");
@@ -267,6 +267,16 @@ namespace BigTry64
                     }
                 }
             }
+        }
+    }
+    public class Tree
+    {
+        private int Height;
+        private int Branches;
+        private Block Blocks;
+        public Tree(int _Height, int _Branches, Block _Blocks)
+        {
+
         }
     }
 }
