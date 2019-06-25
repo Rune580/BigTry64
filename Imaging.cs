@@ -9,7 +9,7 @@ namespace BigTry64
     {
         public static string fullWorld(World world)
         {
-            float percent = 0;
+            int percent = -1;
             Bitmap viewFrame;
             Bitmap block;
 
@@ -24,10 +24,13 @@ namespace BigTry64
             {
                 for (int y = 0; y < world.Blocks.GetLength(1); y++)
                 {
-                    percent = ((x + y) / (world.Blocks.GetLength(0) + world.Blocks.GetLength(1))) * 100;
-                    Console.WriteLine($"Percentage done creating image: {percent}");
                     block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
                     graphics.DrawImage(block, x*32, y*32);
+                }
+                if ((int)((float)x / (float)world.Blocks.GetLength(0)) * 100 != percent)
+                {
+                    percent = (int)((float)x / (float)world.Blocks.GetLength(0)) * 100;
+                    Console.WriteLine($"Percentage done creating image: {percent}");
                 }
             }
             string output = @"images/output.png";
