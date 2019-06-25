@@ -7,7 +7,7 @@ namespace BigTry64
     public class World
     {
         public string Name;
-        public Block[,] Blocks = new Block[200, 150];
+        public Block[,] Blocks = new Block[500, 150];
 
         public void genWorld()
         {
@@ -92,7 +92,7 @@ namespace BigTry64
                 }
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
-                    int dirtTile = rand.Next(grassTile+1, grassTile+4);
+                    int dirtTile = rand.Next(grassTile+1, grassTile+12);
                     if (y < grassTile)
                     {
                         Blocks[x, y] = new Block(@"images/BT_air.png", "air", false);
@@ -111,6 +111,18 @@ namespace BigTry64
                     }
                 }
             }
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    int oreCoalTile = rand.Next(20, 120);
+                    if (Blocks[x, y].Name == "stone");
+                    {
+                        //Blocks[x, y] = new Block(@"images/BT_orecoal.png", "coal", true);
+                    }
+                }
+            }
+            Console.WriteLine("WorldGen Complete");
         }
     }
 }

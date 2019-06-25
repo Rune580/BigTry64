@@ -31,7 +31,7 @@ namespace BigTry64
             finalImage.Save(output);
             return output;
         }
-        public static string display(World world)
+        public static string display(World world, int _x, int _y)
         {
             Bitmap viewFrame;
             Bitmap block;
@@ -43,12 +43,13 @@ namespace BigTry64
             var graphics = Graphics.FromImage(finalImage);
 
             graphics.DrawImage(viewFrame, 0, 0);
-            for (int x = 0; x < world.Blocks.GetLength(0); x++)
+            for (int x = _x-10; x < _x+10; x++)
             {
-                for (int y = 0; y < world.Blocks.GetLength(1); y++)
+                for (int y = _y-7; y < _y+8; y++)
                 {
                     block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
-                    graphics.DrawImage(block, x * 32, y * 32);
+                    Console.WriteLine(world.Blocks[x,y].Name);
+                    graphics.DrawImage(block, (x - _x)* 32, (y - _y)* 32);
                 }
             }
             string output = @"images/output.png";
