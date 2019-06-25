@@ -9,6 +9,7 @@ namespace BigTry64
     {
         public static string fullWorld(World world)
         {
+            float percent = 0;
             Bitmap viewFrame;
             Bitmap block;
 
@@ -23,6 +24,8 @@ namespace BigTry64
             {
                 for (int y = 0; y < world.Blocks.GetLength(1); y++)
                 {
+                    percent = ((x + y) / (world.Blocks.GetLength(0) + world.Blocks.GetLength(1))) * 100;
+                    Console.WriteLine($"Percentage done creating image: {percent}");
                     block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
                     graphics.DrawImage(block, x*32, y*32);
                 }
