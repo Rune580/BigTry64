@@ -27,14 +27,16 @@ namespace BigTry64
             {
                 for (int y = 0; y < world.Blocks.GetLength(1); y++)
                 {
+                    Console.CursorVisible = false;
                     Console.SetCursorPosition(0, 0);
                     block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
                     graphics.DrawImage(block, x*32, y*32);
                     blocksDone++;
-                    Console.WriteLine($"{blocksDone} Tiles out of {totalBlocks} rendered. {(((float)x / (float)world.Blocks.GetLength(0)) * 100)/* + (((float)y / (float)world.Blocks.GetLength(1)) * 100)*/}%");
+                    Console.WriteLine($"{blocksDone} Tiles out of {totalBlocks} rendered. %{(((float)x / (float)world.Blocks.GetLength(0)) * 100)/* + (((float)y / (float)world.Blocks.GetLength(1)) * 100)*/}");
                 }
             }
             Console.Clear();
+            Console.CursorVisible = true;
             string output = @"images/output.png";
             finalImage.Save(output);
             return output;
