@@ -25,7 +25,7 @@ namespace BigTry64
                 {
                     for (int i = 0; i < item.Blocks.GetLength(1); i++)
                     {
-                        if (item.Blocks[item.Blocks.GetLength(0) / 2, i].Name != "air")
+                        if (item.Blocks[item.Blocks.GetLength(0) / 2, i].Name != "air" && item.Blocks[item.Blocks.GetLength(0) / 2, i].Solid == true)
                         {
                             Players.Add(new Player(item.Blocks.GetLength(0) / 2,i-1, ID, item.Name, @"images/crying.png"));
                             break;
@@ -36,6 +36,10 @@ namespace BigTry64
         }
         public async Task Display(ulong ID, SocketMessage message)
         {
+            if (!IsIn(ID))
+            {
+                SpawnPlayer(ID, message);
+            }
             foreach (var item in Players)
             {
                 if (item.UserID == ID)
@@ -51,6 +55,17 @@ namespace BigTry64
                     break;
                 }
             }
+        }
+        public bool IsIn(ulong ID)
+        {
+            foreach (var item in Players)
+            {
+                if (item.UserID == ID)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

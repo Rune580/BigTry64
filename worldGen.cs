@@ -7,7 +7,8 @@ namespace BigTry64
     public class World
     {
         public string Name;
-        public Block[,] Blocks;        Random rand = new Random();
+        public Block[,] Blocks;
+        Random rand = new Random();
         public World(string _Name, int _X, int _Y)
         {
             Name = _Name;
