@@ -66,15 +66,17 @@ namespace BigTry64
     }
     public class Block : BaseObject
     {
-        public Block(string _FilePath, string _Name, bool _Solid, string _Text = "")
+        public Block(string _FilePath, string _Name, bool _Solid,int _Chance = 0, string _Text = "")
         {
             FilePath = _FilePath;
             Name = _Name;
             Solid = _Solid;
             Text = _Text;
+            Chance = _Chance;
         }
         public bool ReadsItsText;
         public string Text;
         public bool Solid;
+        public int Chance;
     }
 }
