@@ -48,7 +48,7 @@ namespace BigTry64
 
 
             Controller game = new Controller();
-            game.Worlds.Add(new World("TestWorld",580,180));
+            game.Worlds.Add(new World("TestWorld",200,180));
             #endregion
 
             async Task MessageReceived(SocketMessage message)

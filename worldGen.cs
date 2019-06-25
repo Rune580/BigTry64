@@ -110,7 +110,7 @@ namespace BigTry64
                     int dirtTile = rand.Next(grassTile+1, grassTile+12);
                     if (y < grassTile)
                     {
-                        Blocks[x, y] = new Block(@"images/BT_air.png", "air", false);
+                        Blocks[x, y] = new Block(@"images/BT_air.png", "air", false, 60);
                     }
                     else if (y == grassTile)
                     {
@@ -156,6 +156,7 @@ namespace BigTry64
                 }
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
+                    int blockLeaves = rand.Next(0, 2);
                     int oreCoalTile = rand.Next(0, 100);
                     int oreIronTile = rand.Next(0, 100);
                     int oreGoldTile = rand.Next(0, 100);
@@ -176,6 +177,18 @@ namespace BigTry64
                     {
                         Blocks[x, y] = new Block(@"images/BT_orediamond.png", "diamond", true, 35);
                     }
+                    else if (Blocks[x, y].Name == "oak" && blockLeaves == 0 && Blocks[x,y+1].Name != "grass")
+                    {
+                        try
+                        {
+                            Blocks[x - 1, y - 1] = new Block(@"images/leaves.png", "leaves", false, 50);
+                            Blocks[x + 1, y - 1] = new Block(@"images/leaves.png", "leaves", false, 50);
+                        }
+                        catch
+                        {
+
+                        }
+                    }
                 }
                 x += Increment;
             }
@@ -183,10 +196,11 @@ namespace BigTry64
             genOre(3, 40, @"images/BT_oreiron.png", "iron");
             genOre(2, 20, @"images/BT_oregold.png", "gold");
             genOre(1, 25, @"images/BT_orediamond.png", "diamond");
+            genOre(4, 20, @"images/leaves.png", "leaves", false, "air");
 
             Console.WriteLine("WorldGen Complete");
         }
-        public void genOre(int passes, int reduction, string orepng, string orename)
+        public void genOre(int passes, int reduction, string orepng, string orename, bool solid=true, string expandType = "stone", int offset = 0)
         {
             for (int i = 0; i < passes; i++)
             {
@@ -202,24 +216,24 @@ namespace BigTry64
                                 int chance = Blocks[x, y].Chance;
                                 int expandChance;
                                 expandChance = rand.Next(0, 100);
-                                if (Blocks[x - 1, y].Chance < expandChance && Blocks[x - 1, y].Name == "stone")
+                                if (Blocks[x - 1, y].Chance < expandChance && Blocks[x - 1, y].Name == expandType)
                                 {
-                                    Blocks[x - 1, y] = new Block(orepng, orename, true, chance - reduction);
+                                    Blocks[x - 1, y] = new Block(orepng, orename, solid, chance - reduction);
                                 }
                                 expandChance = rand.Next(0, 100);
-                                if (Blocks[x + 1, y].Chance < expandChance && Blocks[x + 1, y].Name == "stone")
+                                if (Blocks[x + 1, y].Chance < expandChance && Blocks[x + 1, y].Name == expandType)
                                 {
-                                    Blocks[x + 1, y] = new Block(orepng, orename, true, chance - reduction);
+                                    Blocks[x + 1, y] = new Block(orepng, orename, solid, chance - reduction);
                                 }
                                 expandChance = rand.Next(0, 100);
-                                if (Blocks[x, y - 1].Chance < expandChance && Blocks[x, y - 1].Name == "stone")
+                                if (Blocks[x, y - 1].Chance < expandChance && Blocks[x, y - 1].Name == expandType)
                                 {
-                                    Blocks[x, y - 1] = new Block(orepng, orename, true, chance - reduction);
+                                    Blocks[x, y - 1] = new Block(orepng, orename, solid, chance - reduction);
                                 }
                                 expandChance = rand.Next(0, 100);
-                                if (Blocks[x, y + 1].Chance < expandChance && Blocks[x, y + 1].Name == "stone")
+                                if (Blocks[x, y + 1].Chance < expandChance && Blocks[x, y + 1].Name == expandType)
                                 {
-                                    Blocks[x, y + 1] = new Block(orepng, orename, true, chance - reduction);
+                                    Blocks[x, y + 1] = new Block(orepng, orename, solid, chance - reduction);
                                 }
 
                             }
