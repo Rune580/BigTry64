@@ -48,23 +48,27 @@ namespace BigTry64
 
 
             Controller game = new Controller();
-            game.Worlds.Add(new World());
-            game.Worlds[0].genWorld();
+            game.Worlds.Add(new World("TestWorld",580,180));
             #endregion
 
             async Task MessageReceived(SocketMessage message)
             {
-                if (message.Content.StartsWith("showWorld"))
+                string TheMessage = message.Content.ToUpper();
+                ulong AuthorID = message.Author.Id;
+
+
+
+                if (TheMessage.StartsWith("SHOWWORLD"))
                 {
-                   await message.Channel.SendFileAsync(Screen.fullWorld(game.Worlds[0], message));
+                    await message.Channel.SendFileAsync(Screen.fullWorld(game.Worlds[0], message));
                 }
-                else if (message.Content.StartsWith("showScreen"))
+                else if (TheMessage.StartsWith("SHOWSCREEN"))
                 {
-                   await message.Channel.SendFileAsync(Screen.display(game.Worlds[0], 10, 30));
+                    await game.Display(message.Author.Id, message);
                 }
-                else if (message.Content.StartsWith("LigmashowScreen"))
+                else if (TheMessage.StartsWith("SPAWNME"))
                 {
-                    await message.Channel.SendFileAsync(Screen.display(game.Worlds[0], 10, 30));
+                    game.SpawnPlayer(AuthorID, message);
                 }
             }
 

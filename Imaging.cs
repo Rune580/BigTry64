@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -44,11 +45,25 @@ namespace BigTry64
             finalImage.Save(output);
             return output;
         }
-        public static string display(World world, int _x, int _y)
+        public static string display(World world, int _x, int _y, List<Player> players, List<Mob> mobs)
         {
             Bitmap viewFrame;
-            Bitmap block;
-
+            Bitmap block = null;
+            List<BaseMob> TempMobs = new List<BaseMob>();
+            foreach (var item in players)
+            {
+                if (item.World == world.Name && item.X > _x-10 && item.X < _x+10 && item.Y > _y-7 && item.Y < _y+8)
+                {
+                    TempMobs.Add(item);
+                }
+            }
+            foreach (var item in mobs)
+            {
+                if (item.World == world.Name && item.X > _x - 10 && item.X < _x + 10 && item.Y > _y - 8 && item.Y < _y + 7)
+                {
+                    TempMobs.Add(item);
+                }
+            }
             viewFrame = (Bitmap)Image.FromFile(@"images/BT_bgsky.png");
 
 
@@ -60,9 +75,22 @@ namespace BigTry64
             for (int x = _x-10; x < _x+10; x++)
             {
                 int y2 = 0;
-                for (int y = _y-7; y < _y+8; y++)
+                for (int y = _y-8; y < _y+7; y++)
                 {
-                    block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
+                    bool FoundMob = false;
+                    foreach (var item in TempMobs)
+                    {
+                        if (item.X == x && item.Y == y)
+                        {
+                            block = (Bitmap)Image.FromFile(item.FilePath);
+                            FoundMob = true;
+                            break;
+                        }
+                    }
+                    if (!FoundMob)
+                    {
+                        block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
+                    }
                     graphics.DrawImage(block, x2 * 32, y2 * 32);
                     y2++;
                 }

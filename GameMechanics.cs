@@ -2,19 +2,55 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BigTry64
 {
     public class Controller
     {
-        public List<Mob> Players;
+        public List<Player> Players;
         public List<Mob> Mobs;
         public List<World> Worlds;
         public Controller()
         {
-            Players = new List<Mob>();
+            Players = new List<Player>();
             Mobs = new List<Mob>();
             Worlds = new List<World>();
+        }
+        public void SpawnPlayer(ulong ID, SocketMessage message)
+        {
+            foreach (var item in Worlds)
+            {
+                if (item.Name == "TestWorld")
+                {
+                    for (int i = 0; i < item.Blocks.GetLength(1); i++)
+                    {
+                        if (item.Blocks[item.Blocks.GetLength(0) / 2, i].Name != "air")
+                        {
+                            Players.Add(new Player(item.Blocks.GetLength(0) / 2,i-1, ID, item.Name, @"images/crying.png"));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        public async Task Display(ulong ID, SocketMessage message)
+        {
+            foreach (var item in Players)
+            {
+                if (item.UserID == ID)
+                {
+                    foreach (var world in Worlds)
+                    {
+                        if (world.Name == item.World)
+                        {
+                            await message.Channel.SendFileAsync(Screen.display(world, item.X, item.Y, Players, Mobs));
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 
@@ -42,12 +78,13 @@ namespace BigTry64
     }
     public class Player : BaseMob
     {
-        public Player(int _X, int _Y, ulong _UserID, string _World)
+        public Player(int _X, int _Y, ulong _UserID, string _World, string _FilePath)
         {
             X = _X;
             Y = _Y;
             UserID = _UserID;
             World = _World;
+            FilePath = _FilePath;
         }
         public ulong UserID;
         public void Move(string _Direction, int _Count, ulong _ID, SocketMessage message = null)
