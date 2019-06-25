@@ -7,8 +7,7 @@ namespace BigTry64
     public class World
     {
         public string Name;
-        public Block[,] Blocks;
-        Random rand = new Random();
+        public Block[,] Blocks;        Random rand = new Random();
         public World(string _Name, int _X, int _Y)
         {
             Name = _Name;
@@ -126,9 +125,33 @@ namespace BigTry64
                     }
                 }
             }
-            // First Pass Ores
+            // First Pass Generation
             for (int x = 0; x < Blocks.GetLength(0); x++)
             {
+                int treeChance = rand.Next(0,100);
+                if (treeChance > 60)
+                {
+                    for (int y = 0; y < Blocks.GetLength(1); y++)
+                    {
+                        if (Blocks[x,y].Name == "grass")
+                        {
+                            int _y = y - 1;
+                            int treeClamp = 20;
+                            treeChance = rand.Next(0, 300);
+                            while (treeChance > 1)
+                            {
+                                Blocks[x, _y] = new Block(@"images/BT_oaklog.png", "oak", false);
+                                _y--;
+                                treeChance = rand.Next(0, treeClamp*treeClamp);
+                                treeClamp--;
+                            }
+                            if (Blocks.GetLength(0) != x)
+                            {
+                                x += 2;
+                            }
+                        }
+                    }
+                }
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
                     int oreCoalTile = rand.Next(0, 100);
@@ -141,7 +164,7 @@ namespace BigTry64
                     }
                     else if (Blocks[x, y].Name == "stone" && oreIronTile == 0 && y > 60)
                     {
-                        Blocks[x, y] = new Block(@"images/BT_oreiron.png", "iron", true, 60);
+                        Blocks[x, y] = new Block(@"images/BT_oreiron.png", "iron", true, 90);
                     }
                     else if (Blocks[x, y].Name == "stone" && oreGoldTile == 0 && y > 100)
                     {
@@ -154,7 +177,7 @@ namespace BigTry64
                 }
             }
             genOre(4, 22, @"images/BT_orecoal.png", "coal");
-            genOre(3, 20, @"images/BT_oreiron.png", "iron");
+            genOre(3, 40, @"images/BT_oreiron.png", "iron");
             genOre(2, 20, @"images/BT_oregold.png", "gold");
             genOre(1, 25, @"images/BT_orediamond.png", "diamond");
 
