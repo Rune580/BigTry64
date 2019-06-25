@@ -134,22 +134,28 @@ namespace BigTry64
                 {
                     for (int y = 0; y < Blocks.GetLength(1); y++)
                     {
-                        if (Blocks[x,y].Name == "grass")
+                        try
                         {
-                            int _y = y - 1;
-                            int treeClamp = 20;
-                            treeChance = rand.Next(0, 300);
-                            while (treeChance > 1)
+                            if (Blocks[x, y].Name == "grass")
                             {
-                                Blocks[x, _y] = new Block(@"images/BT_oaklog.png", "oak", false);
-                                _y--;
-                                treeChance = rand.Next(0, treeClamp*treeClamp);
-                                treeClamp--;
+                                int _y = y - 1;
+                                int treeClamp = 20;
+                                treeChance = rand.Next(0, 300);
+                                while (treeChance > 1)
+                                {
+                                    Blocks[x, _y] = new Block(@"images/BT_oaklog.png", "oak", false);
+                                    _y--;
+                                    treeChance = rand.Next(0, treeClamp * treeClamp);
+                                    treeClamp--;
+                                }
+                                if (Blocks.GetLength(0) != x)
+                                {
+                                    x += 2;
+                                }
                             }
-                            if (Blocks.GetLength(0) != x)
-                            {
-                                x += 2;
-                            }
+                        }
+                        catch
+                        {
                         }
                     }
                 }
