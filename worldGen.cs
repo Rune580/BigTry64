@@ -20,18 +20,18 @@ namespace BigTry64
             {
                 if (x == 0)
                 {
-                    grassTile = rand.Next(20, 36);
+                    grassTile = rand.Next(40, 60);
                     previousGrass = grassTile;
                 }
                 else if(x == 1)
                 {
                     ppGrass = previousGrass;
                     grassTile = rand.Next(previousGrass - 1, previousGrass + 2);
-                    while (grassTile > 35)
+                    while (grassTile > 59)
                     {
                         grassTile--;
                     }
-                    while (grassTile < 20)
+                    while (grassTile < 40)
                     {
                         grassTile++;
                     }
@@ -88,6 +88,14 @@ namespace BigTry64
                         {
                             grassTile = previousGrass + 1;
                         }
+                    }
+                    while (grassTile > 59)
+                    {
+                        grassTile--;
+                    }
+                    while (grassTile < 40)
+                    {
+                        grassTile++;
                     }
                     previousGrass = grassTile;
                 }
