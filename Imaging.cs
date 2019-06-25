@@ -43,14 +43,17 @@ namespace BigTry64
             var graphics = Graphics.FromImage(finalImage);
 
             graphics.DrawImage(viewFrame, 0, 0);
+            int x2 = 0;
             for (int x = _x-10; x < _x+10; x++)
             {
+                int y2 = 0;
                 for (int y = _y-7; y < _y+8; y++)
                 {
                     block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
-                    Console.WriteLine(world.Blocks[x,y].Name);
-                    graphics.DrawImage(block, (x - _x)* 32, (y - _y)* 32);
+                    graphics.DrawImage(block, x2 * 32, y2 * 32);
+                    y2++;
                 }
+                x2++;
             }
             string output = @"images/output.png";
             finalImage.Save(output);

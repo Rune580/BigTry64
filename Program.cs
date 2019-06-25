@@ -62,6 +62,10 @@ namespace BigTry64
                 {
                    await message.Channel.SendFileAsync(Screen.display(game.Worlds[0], 10, 30));
                 }
+                else if (message.Content.StartsWith("LigmashowScreen"))
+                {
+                    await message.Channel.SendFileAsync(Screen.display(game.Worlds[0], 10, 30));
+                }
             }
 
 
