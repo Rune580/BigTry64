@@ -4,11 +4,11 @@ using System.Text;
 
 namespace BigTry64
 {
+    [Serializable]
     public class World
     {
         public string Name;
         public Block[,] Blocks;
-        Random rand = new Random();
         public World(string _Name, int _X, int _Y)
         {
             Name = _Name;
@@ -18,7 +18,7 @@ namespace BigTry64
 
         public void genWorld()
         {
-            
+            Random rand = new Random();
             int grassTile = 0;
             int previousGrass = 0;
             int ppGrass = 0;
@@ -203,6 +203,7 @@ namespace BigTry64
         }
         public void genOre(int passes, int reduction, string orepng, string orename, bool solid=true, string expandType = "stone", int offset = 0)
         {
+            Random rand = new Random();
             for (int i = 0; i < passes; i++)
             {
                 for (int x = 0; x < Blocks.GetLength(0); x++)
@@ -249,6 +250,7 @@ namespace BigTry64
         }
         public void removeLeaves()
         {
+            Random rand = new Random();
             for (int x = 0; x < Blocks.GetLength(0); x++)
             {
                 for (int y = 0; y < Blocks.GetLength(1); y++)
@@ -269,6 +271,8 @@ namespace BigTry64
             }
         }
     }
+
+    [Serializable]
     public class Tree
     {
         private int Height;

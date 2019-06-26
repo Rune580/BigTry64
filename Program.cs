@@ -47,9 +47,18 @@ namespace BigTry64
 
 
             IFormatter formatter = new BinaryFormatter();
-            Controller game = null;
-            game = new Controller();
-            game.Worlds.Add(new World("TestWorld", 200, 180));
+            Controller game = new Controller();
+            if (File.Exists(@"Save.bin"))
+            {
+                using (Stream s = new FileStream(@"Save.bin", FileMode.Open, FileAccess.Read))
+                {
+                    game = (Controller)formatter.Deserialize(s);
+                }
+            }
+            else
+            {
+                game.Worlds.Add(new World("TestWorld", 200, 180));
+            }
             #endregion
 
             async Task MessageReceived(SocketMessage message)
@@ -185,7 +194,7 @@ namespace BigTry64
             Client.MessageReceived += MessageReceived;
             void BinarySave()
             {
-                using (Stream s = new FileStream(@"Save.bin", FileMode.Create))
+                using (Stream s = new FileStream(@"Save.bin", FileMode.Create, FileAccess.Write))
                 {
                     formatter.Serialize(s, game);
                 }

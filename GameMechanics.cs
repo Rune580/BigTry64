@@ -136,6 +136,10 @@ namespace BigTry64
                                         Count = 0;
                                     }
                                 }
+                                else if (item.Blocks[TempX, TempY].Solid && Direction == "DOWN")
+                                {
+                                    TempY--;
+                                }
                                 while (!item.Blocks[TempX, TempY+1].Solid)
                                 {
                                     TempY++;
@@ -250,13 +254,14 @@ namespace BigTry64
     }
 
 
-
+    [Serializable]
     public class BaseObject
     {
         //Image to use when representing here
         public string Name;
         public string FilePath;
     }
+    [Serializable]
     public class BaseMob : BaseObject
     {
         public int X, Y;
@@ -264,6 +269,7 @@ namespace BigTry64
         public Item[,] Inventory = new Item[9,4];
         public string World;
     }
+    [Serializable]
     public class Mob : BaseMob
     {
         public void AutoMove()
@@ -271,6 +277,7 @@ namespace BigTry64
 
         }
     }
+    [Serializable]
     public class Player : BaseMob
     {
         public Player(int _X, int _Y, ulong _UserID, string _World, string _FilePath)
@@ -284,6 +291,7 @@ namespace BigTry64
         public ulong UserID;
     }
 
+    [Serializable]
     public class Item : BaseObject
     {
         public Item(Block _Block, string _Type, int _Count = 1)
@@ -297,6 +305,7 @@ namespace BigTry64
         public string Type;
         public int Count;
     }
+    [Serializable]
     public class Block : BaseObject
     {
         public Block(string _FilePath, string _Name, bool _Solid,int _Chance = 0, Block _backgroundBlock = null, string _Text = "")
