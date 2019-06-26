@@ -342,7 +342,7 @@ namespace BigTry64
     [Serializable]
     public class Block : BaseObject
     {
-        public Block(string _FilePath, string _Name, bool _Solid,int _Chance = 0, Block _backgroundBlock = null, bool _isTree = false, string _Text = "")
+        public Block(string _FilePath, string _Name, bool _Solid,int _Chance = 0, Block _backgroundBlock = null, bool _isTree = false, bool _placedByPlayer = false, bool _Breakable = true, string _Text = "")
         {
             FilePath = _FilePath;
             Name = _Name;
@@ -351,6 +351,8 @@ namespace BigTry64
             Chance = _Chance;
             backgroundBlock = _backgroundBlock;
             isTree = _isTree;
+            placedByPlayer = _placedByPlayer;
+            Breakable = _Breakable;
         }
         public bool ReadsItsText;
         public string Text;
@@ -358,6 +360,8 @@ namespace BigTry64
         public int Chance;
         public Block backgroundBlock;
         public bool isTree;
+        public bool placedByPlayer;
+        public bool Breakable;
         ~Block()
         {
             

@@ -150,9 +150,13 @@ namespace BigTry64
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
                     int dirtTile = rand.Next(grassTile+1, grassTile+12);
-                    if (y < grassTile)
+                    if (x == 0 || x == Blocks.GetLength(0) - 1 || y == 0 || y == Blocks.GetLength(1) - 1)
                     {
-                        Blocks[x, y] = new Block(@"images/BT_air.png", "air", false, 60);
+                        Blocks[x, y] = new Block(@"images/BT_bedrock.png", "unbreakable", true, _Breakable: false);
+                    }
+                    else if (y < grassTile)
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_air.png", "air", false, 60, _Breakable: false);
                     }
                     else if (y == grassTile)
                     {
@@ -317,24 +321,24 @@ namespace BigTry64
                 do
                 {
 
-                    if (Blocks[x, y].Name != "air" && Blocks[x, y].Name != "leaves" && Blocks[x, y].Name != "oak")
+                    if (Blocks[x, y].Name != "air" && Blocks[x, y].Name != "leaves" && Blocks[x, y].Name != "oak" && Blocks[x, y].Name != "unbreakable")
                     {
                         Blocks[x, y] = new Block(@"images/BT_darkstone.png", "darkstone", false);
                         if (x != 0 && Blocks[x - 1, y].Name != "air" && Blocks[x - 1, y].Name != "leaves" && Blocks[x - 1, y].Name != "oak")
                         {
-                            Blocks[x - 1, y] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                            Blocks[x - 1, y] = new Block(@"images/BT_darkstone.png", "darkstone", false, _Breakable: false);
                         }
                         if (x != Blocks.GetLength(0) - 1 && Blocks[x + 1, y].Name != "air" && Blocks[x + 1, y].Name != "leaves" && Blocks[x + 1, y].Name != "oak")
                         {
-                            Blocks[x + 1, y] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                            Blocks[x + 1, y] = new Block(@"images/BT_darkstone.png", "darkstone", false, _Breakable: false);
                         }
                         if (y != 0 && Blocks[x, y - 1].Name != "air" && Blocks[x, y - 1].Name != "leaves" && Blocks[x, y - 1].Name != "oak")
                         {
-                            Blocks[x, y - 1] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                            Blocks[x, y - 1] = new Block(@"images/BT_darkstone.png", "darkstone", false, _Breakable: false);
                         }
                         if (y != Blocks.GetLength(1) - 1 && Blocks[x, y + 1].Name != "air" && Blocks[x, y + 1].Name != "leaves" && Blocks[x, y + 1].Name != "oak")
                         {
-                            Blocks[x, y + 1] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                            Blocks[x, y + 1] = new Block(@"images/BT_darkstone.png", "darkstone", false, _Breakable: false);
                         }
                         int clamp = rand.Next(0, 300);
                         if (length < 600)
