@@ -108,6 +108,7 @@ namespace BigTry64
                         {
                             block = (Bitmap)Image.FromFile(item.FilePath);
                             graphics.DrawImage(block, x2 * 32, y2 * 32);
+                            block.Dispose();
                             break;
                         }
                     }
@@ -117,6 +118,9 @@ namespace BigTry64
             }
             string output = @"images/output.png";
             finalImage.Save(output);
+            graphics.Dispose();
+            viewFrame.Dispose();
+            finalImage.Dispose();
             return output;
         }
     }
