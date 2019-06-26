@@ -253,6 +253,7 @@ namespace BigTry64
         // Generate Caves
         public void genCaves()
         {
+            Random rand = new Random();
             int numCaves = rand.Next(2, Blocks.GetLength(0)/25);
             for (int i = 0; i < numCaves; i++)
             {
