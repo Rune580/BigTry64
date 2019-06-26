@@ -129,8 +129,43 @@ namespace BigTry64
             // First Pass Generation
             for (int x = 0; x < Blocks.GetLength(0); x++)
             {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    int oreCoalTile = rand.Next(0, 100);
+                    int oreIronTile = rand.Next(0, 100);
+                    int oreGoldTile = rand.Next(0, 100);
+                    int oreDiamondTile = rand.Next(0, 200);
+                    if (Blocks[x, y].Name == "stone" && oreCoalTile == 0)
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_orecoal.png", "coal", true, 100);
+                    }
+                    else if (Blocks[x, y].Name == "stone" && oreIronTile == 0 && y > 60)
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_oreiron.png", "iron", true, 90);
+                    }
+                    else if (Blocks[x, y].Name == "stone" && oreGoldTile == 0 && y > 100)
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_oregold.png", "gold", true, 55);
+                    }
+                    else if (Blocks[x, y].Name == "stone" && oreDiamondTile == 0 && y > 120)
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_orediamond.png", "diamond", true, 35);
+                    }
+                    
+                }
+                
+            }
+            genOre(4, 22, @"images/BT_orecoal.png", "coal");
+            genOre(3, 40, @"images/BT_oreiron.png", "iron");
+            genOre(2, 20, @"images/BT_oregold.png", "gold");
+            genOre(1, 25, @"images/BT_orediamond.png", "diamond");
+            genCaves();
+
+            // Second Pass Generation
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
                 int Increment = 0;
-                int treeChance = rand.Next(0,100);
+                int treeChance = rand.Next(0, 100);
                 if (treeChance > 60)
                 {
                     for (int y = 0; y < Blocks.GetLength(1); y++)
@@ -157,27 +192,7 @@ namespace BigTry64
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
                     int blockLeaves = rand.Next(0, 2);
-                    int oreCoalTile = rand.Next(0, 100);
-                    int oreIronTile = rand.Next(0, 100);
-                    int oreGoldTile = rand.Next(0, 100);
-                    int oreDiamondTile = rand.Next(0, 200);
-                    if (Blocks[x, y].Name == "stone" && oreCoalTile == 0)
-                    {
-                        Blocks[x, y] = new Block(@"images/BT_orecoal.png", "coal", true, 100);
-                    }
-                    else if (Blocks[x, y].Name == "stone" && oreIronTile == 0 && y > 60)
-                    {
-                        Blocks[x, y] = new Block(@"images/BT_oreiron.png", "iron", true, 90);
-                    }
-                    else if (Blocks[x, y].Name == "stone" && oreGoldTile == 0 && y > 100)
-                    {
-                        Blocks[x, y] = new Block(@"images/BT_oregold.png", "gold", true, 55);
-                    }
-                    else if (Blocks[x, y].Name == "stone" && oreDiamondTile == 0 && y > 120)
-                    {
-                        Blocks[x, y] = new Block(@"images/BT_orediamond.png", "diamond", true, 35);
-                    }
-                    else if (Blocks[x, y].Name == "oak" && blockLeaves == 0 && Blocks[x,y+1].Name != "grass")
+                    if (Blocks[x, y].Name == "oak" && blockLeaves == 0 && Blocks[x, y + 1].Name != "grass")
                     {
                         try
                         {
@@ -192,13 +207,9 @@ namespace BigTry64
                 }
                 x += Increment;
             }
-            genOre(4, 22, @"images/BT_orecoal.png", "coal");
-            genOre(3, 40, @"images/BT_oreiron.png", "iron");
-            genOre(2, 20, @"images/BT_oregold.png", "gold");
-            genOre(1, 25, @"images/BT_orediamond.png", "diamond");
             genOre(3, 20, @"images/BT_leaves.png", "leaves", false, "air");
             removeLeaves();
-            genCaves();
+
 
             Console.WriteLine("WorldGen Complete");
         }
@@ -254,11 +265,11 @@ namespace BigTry64
         public void genCaves()
         {
             Random rand = new Random();
-            int numCaves = rand.Next(2, Blocks.GetLength(0)/25);
+            int numCaves = rand.Next(3, Blocks.GetLength(0)/20);
             for (int i = 0; i < numCaves; i++)
             {
                 int x = rand.Next(0, Blocks.GetLength(0));
-                int y = 0;
+                int y = rand.Next(0, Blocks.GetLength(1));
                 int length = 0;
                 
                 do
@@ -266,7 +277,24 @@ namespace BigTry64
 
                     if (Blocks[x, y].Name != "air" && Blocks[x, y].Name != "leaves" && Blocks[x, y].Name != "oak")
                     {
-                        int clamp = rand.Next(0, 200);
+                        Blocks[x, y] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                        if (x != 0 && Blocks[x - 1, y].Name != "air" && Blocks[x - 1, y].Name != "leaves" && Blocks[x - 1, y].Name != "oak")
+                        {
+                            Blocks[x - 1, y] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                        }
+                        if (x != Blocks.GetLength(0) - 1 && Blocks[x + 1, y].Name != "air" && Blocks[x + 1, y].Name != "leaves" && Blocks[x + 1, y].Name != "oak")
+                        {
+                            Blocks[x + 1, y] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                        }
+                        if (y != 0 && Blocks[x, y - 1].Name != "air" && Blocks[x, y - 1].Name != "leaves" && Blocks[x, y - 1].Name != "oak")
+                        {
+                            Blocks[x, y - 1] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                        }
+                        if (y != Blocks.GetLength(1) - 1 && Blocks[x, y + 1].Name != "air" && Blocks[x, y + 1].Name != "leaves" && Blocks[x, y + 1].Name != "oak")
+                        {
+                            Blocks[x, y + 1] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                        }
+                        int clamp = rand.Next(0, 300);
                         if (length < 600)
                         {
                             length++;
@@ -279,7 +307,7 @@ namespace BigTry64
                             }
                         }
                         int _x = rand.Next(0, 2);
-                        int _y = rand.Next(0, 15);
+                        int _y = rand.Next(0, 18);
                         switch (_x)
                         {
                             case 0:
@@ -307,7 +335,6 @@ namespace BigTry64
                             x++;
                         }
                         y += _y;
-                        Blocks[x, y] = new Block(@"images/BT_darkstone.png", "darkstone", false);
                     }
                     else
                     {
