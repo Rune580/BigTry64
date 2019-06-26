@@ -52,7 +52,7 @@ namespace BigTry64
             finalImage.Dispose();
             return output;
         }
-        public static string display(World world, int _x, int _y, List<Player> players, List<Mob> mobs)
+        public static string display(World world, int _x, int _y, List<Player> players, List<Mob> mobs, Player player, bool Inv)
         {
             Bitmap viewFrame;
             Bitmap block = null;
@@ -78,7 +78,6 @@ namespace BigTry64
             var graphics = Graphics.FromImage(finalImage);
 
             graphics.DrawImage(viewFrame, 0, 0);
-            int x2 = 0;
             while (_x -10 < 0)
             {
                 _x++;
@@ -95,6 +94,7 @@ namespace BigTry64
             {
                 _y--;
             }
+            int x2 = 0;
             for (int x = _x-10; x < _x+10; x++)
             {
                 int y2 = 0;
@@ -114,6 +114,33 @@ namespace BigTry64
                     y2++;
                 }
                 x2++;
+            }
+            if (Inv)
+            {
+                Bitmap INV = (Bitmap)Image.FromFile(@"images/BT_inventory.png");
+                graphics.DrawImage(INV, 50, 87);
+                for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                {
+                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                    {
+                        if (player.Inventory[x,y] != null)
+                        {
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Bitmap INV = (Bitmap)Image.FromFile(@"images/BT_hotbar.png");
+                graphics.DrawImage(INV, 100, 270);
+                for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                {
+                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                    {
+
+                    }
+                }
             }
             string output = @"images/output.png";
             finalImage.Save(output);

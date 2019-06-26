@@ -188,6 +188,10 @@ namespace BigTry64
                 {
                     BinarySave();
                 }
+                else if (TheMessage.StartsWith("SHOWINV"))
+                {
+                    await game.Display(message.Author.Id, message, true);
+                }
             }
 
 

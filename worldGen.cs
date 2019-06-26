@@ -263,6 +263,7 @@ namespace BigTry64
                 
                 do
                 {
+
                     if (Blocks[x, y].Name != "air" && Blocks[x, y].Name != "leaves" && Blocks[x, y].Name != "oak")
                     {
                         int clamp = rand.Next(0, 200);

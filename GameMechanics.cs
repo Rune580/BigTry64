@@ -35,7 +35,7 @@ namespace BigTry64
                 }
             }
         }
-        public async Task Display(ulong ID, SocketMessage message)
+        public async Task Display(ulong ID, SocketMessage message, bool Inventory = false)
         {
             if (!IsIn(ID))
             {
@@ -49,7 +49,7 @@ namespace BigTry64
                     {
                         if (world.Name == item.World)
                         {
-                            await message.Channel.SendFileAsync(Screen.display(world, item.X, item.Y, Players, Mobs));
+                            await message.Channel.SendFileAsync(Screen.display(world, item.X, item.Y, Players, Mobs, item, Inventory));
                             break;
                         }
                     }
