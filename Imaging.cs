@@ -34,8 +34,12 @@ namespace BigTry64
                     Console.SetCursorPosition(0, 0);
                     block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
                     graphics.DrawImage(block, x*32, y*32);
+                    block.Dispose();
                     blocksDone++;
-                    Console.WriteLine($"{blocksDone} Tiles out of {totalBlocks} rendered. {(int)(((float)x / (float)world.Blocks.GetLength(0)) * 100)}%");
+                    Console.WriteLine($"{blocksDone} Tiles out of {totalBlocks} rendered. {(int)(((float)x / (float)world.Blocks.GetLength(0)) * 100)}%                                                                                                                                                                                                                       ");
+                    Console.WriteLine("                                                                                                                                                                                                                       ");
+                    Console.WriteLine("                                                                                                                                                                                                                       ");
+                    Console.WriteLine("                                                                                                                                                                                                                       ");
                     Percent = (int)(((float)x / (float)world.Blocks.GetLength(0)) * 10);
                 }
             }
@@ -43,6 +47,9 @@ namespace BigTry64
             Console.CursorVisible = true;
             string output = @"images/output.png";
             finalImage.Save(output);
+            graphics.Dispose();
+            viewFrame.Dispose();
+            finalImage.Dispose();
             return output;
         }
         public static string display(World world, int _x, int _y, List<Player> players, List<Mob> mobs)
