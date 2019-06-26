@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BigTry64
 {
+    [Serializable]
     public class Controller
     {
         public List<Player> Players;

@@ -3,6 +3,8 @@ using Discord.Commands;
 using Discord.WebSocket;
 using System;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 
 namespace BigTry64
@@ -44,11 +46,10 @@ namespace BigTry64
             Client.StartAsync();
 
 
-
-
-
-            Controller game = new Controller();
-            game.Worlds.Add(new World("TestWorld",200,180));
+            IFormatter formatter = new BinaryFormatter();
+            Controller game = null;
+            game = new Controller();
+            game.Worlds.Add(new World("TestWorld", 200, 180));
             #endregion
 
             async Task MessageReceived(SocketMessage message)
@@ -174,12 +175,21 @@ namespace BigTry64
                     }
                     await game.BreakBlock(AuthorID, Direction1, Direction2, message);
                 }
-
+                else if (TheMessage.StartsWith("SAVEWORLD"))
+                {
+                    BinarySave();
                 }
+            }
 
 
             Client.MessageReceived += MessageReceived;
-
+            void BinarySave()
+            {
+                using (Stream s = new FileStream(@"Save.bin", FileMode.Create))
+                {
+                    formatter.Serialize(s, game);
+                }
+            }
             do
             {
 
