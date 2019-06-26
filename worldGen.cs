@@ -16,6 +16,48 @@ namespace BigTry64
             genWorld();
         }
 
+        public void refreshLeaves()
+        {
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    if (Blocks[x,y].Name == "leaves")
+                    {
+                        Console.WriteLine($"found leaves at {x} , {y}");
+                        for (int i = 0; i < 5; i++)
+                        {
+                            Console.WriteLine(!Blocks[x+i,y].isTree);
+                            try
+                            {
+                                if (!Blocks[x + i, y].isTree)
+                                {
+                                    Console.WriteLine(x+i);
+                                    Blocks[x, y] = new Block(@"images/BT_air.png", "air", false);
+                                }
+                            }
+                            catch
+                            {
+                            }
+
+                            try
+                            {
+                                if (!Blocks[x - i, y].isTree)
+                                {
+                                    Console.WriteLine(x-i);
+                                    Blocks[x, y] = new Block(@"images/BT_air.png", "air", false);
+                                }
+                            }
+                            catch 
+                            {
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
         public void genWorld()
         {
             Random rand = new Random();
@@ -177,7 +219,7 @@ namespace BigTry64
                             treeChance = rand.Next(0, 300);
                             while (treeChance > 1)
                             {
-                                Blocks[x, _y] = new Block(@"images/BT_oaklog.png", "oak", false, _backgroundBlock: new Block(@"images/BT_air.png", "air", false));
+                                Blocks[x, _y] = new Block(@"images/BT_oaklog.png", "oak", false, _backgroundBlock: new Block(@"images/BT_air.png", "air", false), _isTree: true);
                                 _y--;
                                 treeChance = rand.Next(0, treeClamp * treeClamp);
                                 treeClamp--;

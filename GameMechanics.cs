@@ -245,8 +245,28 @@ namespace BigTry64
                                         }
                                     }
                                 }
+                            }
+                            Console.WriteLine(world.Blocks[player.X + _X, player.Y + _Y].isTree);
+                            if (world.Blocks[player.X + _X, player.Y + _Y].isTree)
+                            {
+                                int treeX = player.X + _X;
+                                int treeY = player.Y + _Y;
+                                Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
+                                while (world.Blocks[treeX, treeY].Name == "oak")
+                                {
+                                    world.Blocks[treeX, treeY] = new Block(@"images/BT_air.png", "air", false, 60);
+                                    treeY--;
+                                    Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
+                                }
+                                world.refreshLeaves();
+                            }
+                            else
+                            {
                                 world.Blocks[player.X + _X, player.Y + _Y] = new Block(@"images/BT_air.png", "air", false, 60);
-                                foreach (var player2 in Players)
+                            }
+                            foreach (var player2 in Players)
+                            {
+                                if (player2.World == world.Name)
                                 {
                                     if (player2.World == world.Name)
                                     {
@@ -322,7 +342,7 @@ namespace BigTry64
     [Serializable]
     public class Block : BaseObject
     {
-        public Block(string _FilePath, string _Name, bool _Solid,int _Chance = 0, Block _backgroundBlock = null, string _Text = "")
+        public Block(string _FilePath, string _Name, bool _Solid,int _Chance = 0, Block _backgroundBlock = null, bool _isTree = false, string _Text = "")
         {
             FilePath = _FilePath;
             Name = _Name;
@@ -330,11 +350,17 @@ namespace BigTry64
             Text = _Text;
             Chance = _Chance;
             backgroundBlock = _backgroundBlock;
+            isTree = _isTree;
         }
         public bool ReadsItsText;
         public string Text;
         public bool Solid;
         public int Chance;
         public Block backgroundBlock;
+        public bool isTree;
+        ~Block()
+        {
+            
+        }
     }
 }
