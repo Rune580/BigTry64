@@ -196,8 +196,9 @@ namespace BigTry64
             genOre(3, 40, @"images/BT_oreiron.png", "iron");
             genOre(2, 20, @"images/BT_oregold.png", "gold");
             genOre(1, 25, @"images/BT_orediamond.png", "diamond");
-            genOre(4, 20, @"images/BT_leaves.png", "leaves", false, "air");
+            genOre(3, 20, @"images/BT_leaves.png", "leaves", false, "air");
             removeLeaves();
+            genCaves();
 
             Console.WriteLine("WorldGen Complete");
         }
@@ -248,6 +249,74 @@ namespace BigTry64
                 }
             }
         }
+
+        // Generate Caves
+        public void genCaves()
+        {
+            int numCaves = rand.Next(2, Blocks.GetLength(0)/25);
+            for (int i = 0; i < numCaves; i++)
+            {
+                int x = rand.Next(0, Blocks.GetLength(0));
+                int y = 0;
+                int length = 0;
+                
+                do
+                {
+                    if (Blocks[x, y].Name != "air" && Blocks[x, y].Name != "leaves" && Blocks[x, y].Name != "oak")
+                    {
+                        int clamp = rand.Next(0, 200);
+                        if (length < 600)
+                        {
+                            length++;
+                        }
+                        else
+                        {
+                            if (clamp == 0)
+                            {
+                                break;
+                            }
+                        }
+                        int _x = rand.Next(0, 2);
+                        int _y = rand.Next(0, 15);
+                        switch (_x)
+                        {
+                            case 0:
+                                _x = -1;
+                                break;
+
+                            case 1:
+                                _x = 1;
+                                break;
+                        }
+                        if (_y == 0)
+                        {
+                            _y = 1;
+                        }
+                        else
+                        {
+                            _y = 0;
+                        }
+                        if (x != 0)
+                        {
+                            x += _x;
+                        }
+                        else
+                        {
+                            x++;
+                        }
+                        y += _y;
+                        Blocks[x, y] = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                    }
+                    else
+                    {
+                        y++;
+                    }
+                } while (y < Blocks.GetLength(1) - 1 && x < Blocks.GetLength(0));
+                Console.WriteLine($"{i + 1} Caves Generated out of {numCaves}!");
+            }
+        }
+
+
         public void removeLeaves()
         {
             Random rand = new Random();
