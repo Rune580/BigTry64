@@ -131,8 +131,16 @@ namespace BigTry64
                         {
                             if (player.Inventory[x, y].Count != 0)
                             {
-                                INV = (Bitmap)Image.FromFile(player.Inventory[x, y].Block.FilePath);
-                                graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + (16 + (64 * y)));
+                                if (y == 3)
+                                {
+                                    INV = (Bitmap)Image.FromFile(player.Inventory[x, y].Block.FilePath);
+                                    graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + (16 + (64 * y)) + 32);
+                                }
+                                else
+                                {
+                                    INV = (Bitmap)Image.FromFile(player.Inventory[x, y].Block.FilePath);
+                                    graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + (16 + (64 * y)));
+                                }
                             }
                         }
                     }

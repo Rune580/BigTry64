@@ -246,19 +246,19 @@ namespace BigTry64
                                     }
                                 }
                             }
-                            Console.WriteLine(world.Blocks[player.X + _X, player.Y + _Y].isTree);
+                            //Console.WriteLine(world.Blocks[player.X + _X, player.Y + _Y].isTree);
                             if (world.Blocks[player.X + _X, player.Y + _Y].isTree)
                             {
                                 int treeX = player.X + _X;
                                 int treeY = player.Y + _Y;
-                                Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
+                                //Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
                                 while (world.Blocks[treeX, treeY].Name == "oak")
                                 {
                                     world.Blocks[treeX, treeY] = new Block(@"images/BT_air.png", "air", false, 60);
                                     treeY--;
                                     Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
                                 }
-                                world.refreshLeaves();
+                                //world.refreshLeaves();
                             }
                             else
                             {
