@@ -204,47 +204,61 @@ namespace BigTry64
                     {
                         if (world.Name == player.World)
                         {
-                            bool FoundItem = false;
-                            for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                            if (world.Blocks[player.X + _X, player.Y + _Y].Name != "air")
                             {
+                                bool FoundItem = false;
                                 for (int y = 0; y < player.Inventory.GetLength(1); y++)
                                 {
-                                    if (player.Inventory[x,y] != null)
+                                    for (int x = 0; x < player.Inventory.GetLength(0); x++)
                                     {
-                                        if (player.Inventory[x, y].Name == world.Blocks[player.X + _X, player.Y + _Y].Name && player.Inventory[x, y].Count != 50)
+                                        if (player.Inventory[x, y] != null)
                                         {
-                                            player.Inventory[x, y].Count++;
-                                            FoundItem = true;
+                                            if (player.Inventory[x, y].Name == world.Blocks[player.X + _X, player.Y + _Y].Name && player.Inventory[x, y].Count != 50)
+                                            {
+                                                player.Inventory[x, y].Count++;
+                                                FoundItem = true;
+                                                break;
+                                            }
                                         }
                                     }
+                                    if (FoundItem)
+                                    {
+                                        break;
+                                    }
                                 }
-                            }
-                            if (!FoundItem)
-                            {
-                                for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                                if (!FoundItem)
                                 {
                                     for (int y = 0; y < player.Inventory.GetLength(1); y++)
                                     {
-                                        if (player.Inventory[x, y] == null)
+                                        for (int x = 0; x < player.Inventory.GetLength(0); x++)
                                         {
-                                            player.Inventory[x, y] = new Item(world.Blocks[player.X + _X, player.Y + _Y], "block");
+                                            if (player.Inventory[x, y] == null)
+                                            {
+                                                player.Inventory[x, y] = new Item(world.Blocks[player.X + _X, player.Y + _Y], "block");
+                                                FoundItem = true;
+                                                break;
+                                            }
+                                        }
+                                        if (FoundItem)
+                                        {
+                                            break;
                                         }
                                     }
                                 }
-                            }
-                            world.Blocks[player.X + _X, player.Y + _Y] = new Block(@"images/BT_air.png", "air", false, 60);
-                            foreach (var player2 in Players)
-                            {
-                                if (player2.World == world.Name)
+                                world.Blocks[player.X + _X, player.Y + _Y] = new Block(@"images/BT_air.png", "air", false, 60);
+                                foreach (var player2 in Players)
                                 {
-                                    while (!world.Blocks[player2.X, player2.Y + 1].Solid)
+                                    if (player2.World == world.Name)
                                     {
-                                        player2.Y++;
+                                        while (!world.Blocks[player2.X, player2.Y + 1].Solid)
+                                        {
+                                            player2.Y++;
+                                        }
                                     }
                                 }
+                                await Display(ID, message);
+                                break;
                             }
-                            await Display(ID, message);
-                            break;
                         }
                     }
                     break;

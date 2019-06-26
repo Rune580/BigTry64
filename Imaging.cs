@@ -119,14 +119,21 @@ namespace BigTry64
             if (Inv)
             {
                 Bitmap INV = (Bitmap)Image.FromFile(@"images/BT_inventory.png");
-                graphics.DrawImage(INV, 50, 87);
+                int StartX = (viewFrame.Width / 2) - ((INV.Width * 2) / 2);
+                int StartY = (int)((viewFrame.Height / 1.2f) - (INV.Height * 1.5f));
+
+                graphics.DrawImage(INV, StartX, StartY, INV.Width * 2, INV.Height * 2);
                 for (int x = 0; x < player.Inventory.GetLength(0); x++)
                 {
                     for (int y = 0; y < player.Inventory.GetLength(1); y++)
                     {
-                        if (player.Inventory[x,y] != null)
+                        if (player.Inventory[x, y] != null)
                         {
-
+                            if (player.Inventory[x, y].Count != 0)
+                            {
+                                INV = (Bitmap)Image.FromFile(player.Inventory[x, y].Block.FilePath);
+                                graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + (16 + (64 * y)));
+                            }
                         }
                     }
                 }
@@ -134,12 +141,22 @@ namespace BigTry64
             else
             {
                 Bitmap INV = (Bitmap)Image.FromFile(@"images/BT_hotbar.png");
-                graphics.DrawImage(INV, 100, 270);
+                int StartX = (viewFrame.Width / 2) - ((INV.Width * 2) / 2);
+                int StartY = (int)((viewFrame.Height / 1.2f) - ((INV.Height - 37) * 1.5f));
+
+                graphics.DrawImage(INV, StartX, StartY, INV.Width * 2, INV.Height * 2);
                 for (int x = 0; x < player.Inventory.GetLength(0); x++)
                 {
                     for (int y = 0; y < player.Inventory.GetLength(1); y++)
                     {
-
+                        if (player.Inventory[x, y] != null && y == 3)
+                        {
+                            if (player.Inventory[x, y].Count != 0)
+                            {
+                                INV = (Bitmap)Image.FromFile(player.Inventory[x, y].Block.FilePath);
+                                graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + (16 + (64 * y)));
+                            }
+                        }
                     }
                 }
             }
