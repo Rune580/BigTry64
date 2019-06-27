@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace BigTry64
@@ -28,7 +29,11 @@ namespace BigTry64
                     {
                         if (item.Blocks[item.Blocks.GetLength(0) / 2, i].Name != "air" && item.Blocks[item.Blocks.GetLength(0) / 2, i].Solid == true && item.Blocks[item.Blocks.GetLength(0) / 2, i].Name != "unbreakable")
                         {
-                            Players.Add(new Player(item.Blocks.GetLength(0) / 2,i-1, ID, item.Name, @"images/crying.png"));
+                            using (WebClient webClient = new WebClient())
+                            {
+                                webClient.DownloadFile(message.Author.GetAvatarUrl(size: 32), $@"images/{message.Author.Id}.png");
+                            }
+                            Players.Add(new Player(item.Blocks.GetLength(0) / 2,i-1, ID, item.Name, $@"images/{message.Author.Id}.png"));
                             break;
                         }
                     }
@@ -344,21 +349,21 @@ namespace BigTry64
     [Serializable]
     public class Recipe
     {
-        public Recipe(List<Item> _inputItems, List<Item> _outputItems, string _craftingHandler)
+        public Recipe(Item[] _inputItems, Item[] _outputItems, string _craftingHandler)
         {
             inputItems = _inputItems;
             outputItems = _outputItems;
             craftingHandler = _craftingHandler;
         }
-        public List<Item> inputItems;
-        public List<Item> outputItems;
+        public Item[] inputItems;
+        public Item[] outputItems;
         public string craftingHandler;
     }
 
     [Serializable]
     public class Block : BaseObject
     {
-        public Block(string _FilePath, string _Name, bool _Solid, int _Chance = 0, Block _backgroundBlock = null, bool _isTree = false, bool _placedByPlayer = false, bool _Breakable = true, string _Text = "")
+        public Block(string _FilePath, string _Name, bool _Solid, int _Chance = 0, Block _backgroundBlock = null, bool _isTree = false, bool _placedByPlayer = false, bool _Ladder = false, bool _Breakable = true, string _Text = "")
         {
             FilePath = _FilePath;
             Name = _Name;
@@ -369,6 +374,7 @@ namespace BigTry64
             isTree = _isTree;
             placedByPlayer = _placedByPlayer;
             Breakable = _Breakable;
+            Ladder = _Ladder;
         }
         public void SetPos(int _X, int _Y)
         {
@@ -430,6 +436,7 @@ namespace BigTry64
         public bool isTree;
         public bool placedByPlayer;
         public bool Breakable;
+        public bool Ladder;
         public int Distance = 99999;
         ~Block()
         {
