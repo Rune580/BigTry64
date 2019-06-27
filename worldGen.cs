@@ -13,7 +13,7 @@ namespace BigTry64
         public World(string _Name, int _X, int _Y)
         {
             Name = _Name;
-            Blocks = new Block[_X, _Y];
+            Blocks = new Block[_X,_Y];
             Recipes = new Recipe[100];
             genWorld();
             addRecipes();
@@ -442,6 +442,11 @@ namespace BigTry64
                     }
                 }
             }
+        }
+
+        // Add Recipes Below
+        public void addRecipes()
+        {
         }
 
         // Add Recipes Below
