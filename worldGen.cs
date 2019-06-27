@@ -16,7 +16,7 @@ namespace BigTry64
             Blocks = new Block[_X,_Y];
             Recipes = new Recipe[100];
             genWorld();
-            addRecipes();
+            InitRecipes();
         }
 
         public void refreshLeaves()
@@ -479,21 +479,32 @@ namespace BigTry64
         }
 
         // Add Recipes Below
-        public void addRecipes()
+        public void InitRecipes()
         {
-            //Recipes[0] = new Recipe();
-        }
+            //Blocks
+            Block oak = new Block(@"images/BT_oaklog.png", "oak", true);
+            Block plank = new Block(@"images/awful_wood.png", "plank", true);
+            Block craftstation = new Block(@"images/craftingstation.png", "craftingstation", false);
+            Block torch = new Block(@"images/torch.png", "torch", false);
+            Block ladder = new Block(@"images/ladder.png", "ladder", false, _Ladder: true);
+            Block coalOre = new Block(@"images/BT_orecoal.png", "coalore", true);
 
-        [Serializable]
-        public class Tree
-        {
-            private int Height;
-            private int Branches;
-            private Block Blocks;
-            public Tree(int _Height, int _Branches, Block _Blocks)
-            {
 
-            }
+            //Items
+            Item oakItem = new Item(oak, "block");
+            Item plankItem = new Item(plank, "block");
+            Item plankItem4 = new Item(plank, "block", 4);
+            Item craftingItem = new Item(craftstation, "block");
+            Item torchItem = new Item(torch, "block");
+            Item ladderItem = new Item(ladder, "block");
+            Item coal = new Item(coalOre, "item");
+
+
+            //Player Recipes
+            Recipes[0] = new Recipe(new Item[] {oakItem}, new Item[] {plankItem4}, "player");
+            Recipes[1] = new Recipe(new Item[] {plankItem4}, new Item[] {craftingItem}, "player");
+            Recipes[2] = new Recipe(new Item[] {plankItem, coal}, new Item[] {torchItem}, "player");
+            Recipes[3] = new Recipe(new Item[] {plankItem}, new Item[] {ladderItem}, "player");
         }
     }
 }
