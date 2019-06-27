@@ -339,6 +339,21 @@ namespace BigTry64
         public string Type;
         public int Count;
     }
+
+    [Serializable]
+    public class Recipe
+    {
+        public Recipe(List<string> _inputItems, List<string> _outputItems, string _craftingHandler)
+        {
+            inputItems = _inputItems;
+            outputItems = _outputItems;
+            craftingHandler = _craftingHandler;
+        }
+        public List<string> inputItems;
+        public List<string> outputItems;
+        public string craftingHandler;
+    }
+
     [Serializable]
     public class Block : BaseObject
     {
@@ -362,9 +377,5 @@ namespace BigTry64
         public bool isTree;
         public bool placedByPlayer;
         public bool Breakable;
-        ~Block()
-        {
-            
-        }
     }
 }
