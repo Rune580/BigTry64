@@ -270,25 +270,35 @@ namespace BigTry64
                             {
                                 world.Blocks[player.X + _X, player.Y + _Y] = new Block(@"images/BT_air.png", "air", false, 60);
                             }
-                            foreach (var player2 in Players)
-                            {
-                                if (player2.World == world.Name)
-                                {
-                                    if (player2.World == world.Name)
-                                    {
-                                        while (!world.Blocks[player2.X, player2.Y + 1].Solid)
-                                        {
-                                            player2.Y++;
-                                        }
-                                    }
-                                }
-                                await Display(ID, message);
-                                break;
-                            }
+                            Gravity();
+                            await Display(ID, message);
                         }
                     }
                     break;
                 }
+            }
+        }
+        public void Gravity()
+        {
+            for (int i = 0; i < Players.Count; i++)
+            {
+
+            }
+            Console.WriteLine(Players.Count);
+            foreach (var player2 in Players)
+            {
+                Console.WriteLine(Players.Count);
+                foreach (var world in Worlds)
+                {
+                    if (player2.World == world.Name)
+                    {
+                        while (!world.Blocks[player2.X, player2.Y + 1].Solid)
+                        {
+                            player2.Y++;
+                        }
+                    }
+                }
+                break;
             }
         }
         public async Task SwapItems(char item1, char item2, ulong ID, SocketMessage message)
