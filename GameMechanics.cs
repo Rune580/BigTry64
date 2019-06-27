@@ -376,7 +376,10 @@ namespace BigTry64
         }
         public void LeafDecay(ref Block[,] Blocks, int _Distance = 99999)
         {
-            Distance = _Distance;
+            if (_Distance != 99999)
+            {
+                Distance = _Distance;
+            }
             while (X-1 < 0)
             {
                 X++;
