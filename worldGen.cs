@@ -197,7 +197,6 @@ namespace BigTry64
                     {
                         Blocks[x, y] = new Block(@"images/BT_orediamond.png", "diamond", true, 35);
                     }
-                    
                 }
                 
             }
@@ -256,7 +255,21 @@ namespace BigTry64
             genOre(3, 20, @"images/BT_leaves.png", "leaves", false, "air");
             removeLeaves();
 
-
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    Blocks[x, y].SetPos(x,y);
+                }
+            }
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    Blocks[x, y].LeafDecay(ref Blocks);
+                }
+            }
+            RemoveDeadLeaves();
             Console.WriteLine("WorldGen Complete");
         }
         public void genOre(int passes, int reduction, string orepng, string orename, bool solid=true, string expandType = "stone", int offset = 0)
@@ -399,7 +412,7 @@ namespace BigTry64
             {
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
-                    if (Blocks[x,y].Name == "grass")
+                    if (Blocks[x,y].Name == "grass" || Blocks[x,y].Name == "darkstone")
                     {
                         int Temp = rand.Next(4, 6);
                         for (int i = 1; i < Temp; i++)
@@ -410,6 +423,19 @@ namespace BigTry64
                             }
                         }
                         break;
+                    }
+                }
+            }
+        }
+        public void RemoveDeadLeaves()
+        {
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    if (Blocks[x, y].Name == "leaves" && Blocks[x, y].Distance > 3)
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_air.png", "air", false, 60, _Breakable: false);
                     }
                 }
             }

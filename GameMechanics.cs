@@ -26,7 +26,7 @@ namespace BigTry64
                 {
                     for (int i = 0; i < item.Blocks.GetLength(1); i++)
                     {
-                        if (item.Blocks[item.Blocks.GetLength(0) / 2, i].Name != "air" && item.Blocks[item.Blocks.GetLength(0) / 2, i].Solid == true)
+                        if (item.Blocks[item.Blocks.GetLength(0) / 2, i].Name != "air" && item.Blocks[item.Blocks.GetLength(0) / 2, i].Solid == true && item.Blocks[item.Blocks.GetLength(0) / 2, i].Name != "unbreakable")
                         {
                             Players.Add(new Player(item.Blocks.GetLength(0) / 2,i-1, ID, item.Name, @"images/crying.png"));
                             break;
@@ -256,7 +256,7 @@ namespace BigTry64
                                 {
                                     world.Blocks[treeX, treeY] = new Block(@"images/BT_air.png", "air", false, 60);
                                     treeY--;
-                                    Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
+                                    //Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
                                 }
                                 //world.refreshLeaves();
                             }
@@ -292,13 +292,13 @@ namespace BigTry64
     public class BaseObject
     {
         //Image to use when representing here
+        public int X, Y;
         public string Name;
         public string FilePath;
     }
     [Serializable]
     public class BaseMob : BaseObject
     {
-        public int X, Y;
         public int Health;
         public Item[,] Inventory = new Item[9,4];
         public string World;
@@ -342,7 +342,7 @@ namespace BigTry64
     [Serializable]
     public class Block : BaseObject
     {
-        public Block(string _FilePath, string _Name, bool _Solid,int _Chance = 0, Block _backgroundBlock = null, bool _isTree = false, bool _placedByPlayer = false, bool _Breakable = true, string _Text = "")
+        public Block(string _FilePath, string _Name, bool _Solid, int _Chance = 0, Block _backgroundBlock = null, bool _isTree = false, bool _placedByPlayer = false, bool _Breakable = true, string _Text = "")
         {
             FilePath = _FilePath;
             Name = _Name;
@@ -354,6 +354,55 @@ namespace BigTry64
             placedByPlayer = _placedByPlayer;
             Breakable = _Breakable;
         }
+        public void SetPos(int _X, int _Y)
+        {
+            X = _X;
+            Y = _Y;
+        }
+        public void LeafDecay(ref Block[,] Blocks, int _Distance = 99999)
+        {
+            Distance = _Distance;
+            while (X-1 < 0)
+            {
+                X++;
+            }
+            while (X+1 >= Blocks.GetLength(0))
+            {
+                X--;
+            }
+            while (Y - 1 < 0)
+            {
+                Y++;
+            }
+            while (Y + 1 >= Blocks.GetLength(1))
+            {
+                Y--;
+            }
+            if (Blocks[X - 1, Y].isTree || Blocks[X + 1, Y].isTree || Blocks[X, Y - 1].isTree || Blocks[X, Y + 1].isTree)
+            {
+                _Distance = 1;
+                Distance = _Distance;
+            }
+            if (_Distance < 3)
+            {
+                if (Blocks[X - 1, Y].Name == "leaves" && Blocks[X - 1, Y].Distance > _Distance + 1)
+                {
+                    Blocks[X - 1, Y].LeafDecay(ref Blocks, _Distance + 1);
+                }
+                if (Blocks[X + 1, Y].Name == "leaves" && Blocks[X + 1, Y].Distance > _Distance + 1)
+                {
+                    Blocks[X + 1, Y].LeafDecay(ref Blocks, _Distance + 1);
+                }
+                if (Blocks[X, Y - 1].Name == "leaves" && Blocks[X, Y - 1].Distance > _Distance + 1)
+                {
+                    Blocks[X, Y - 1].LeafDecay(ref Blocks, _Distance + 1);
+                }
+                if (Blocks[X, Y + 1].Name == "leaves" && Blocks[X, Y + 1].Distance > _Distance + 1)
+                {
+                    Blocks[X, Y + 1].LeafDecay(ref Blocks, _Distance + 1);
+                }
+            }
+        }
         public bool ReadsItsText;
         public string Text;
         public bool Solid;
@@ -362,6 +411,7 @@ namespace BigTry64
         public bool isTree;
         public bool placedByPlayer;
         public bool Breakable;
+        public int Distance = 99999;
         ~Block()
         {
             
