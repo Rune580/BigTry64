@@ -257,22 +257,7 @@ namespace BigTry64
             }
             genOre(3, 20, @"images/BT_leaves.png", "leaves", false, "air");
             removeLeaves();
-
-            for (int x = 0; x < Blocks.GetLength(0); x++)
-            {
-                for (int y = 0; y < Blocks.GetLength(1); y++)
-                {
-                    Blocks[x, y].SetPos(x, y);
-                }
-            }
-            for (int x = 0; x < Blocks.GetLength(0); x++)
-            {
-                for (int y = 0; y < Blocks.GetLength(1); y++)
-                {
-                    Blocks[x, y].LeafDecay(ref Blocks);
-                }
-            }
-            RemoveDeadLeaves();
+            LeafCycle();
             Console.WriteLine("WorldGen Complete");
         }
         public void genOre(int passes, int reduction, string orepng, string orename, bool solid = true, string expandType = "stone", int offset = 0)
@@ -407,7 +392,7 @@ namespace BigTry64
             }
         }
 
-
+        // Cycle Leaves
         public void removeLeaves()
         {
             Random rand = new Random();
@@ -442,6 +427,31 @@ namespace BigTry64
                     }
                 }
             }
+        }
+        public void LeafCycle()
+        {
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    Blocks[x, y].SetPos(x, y);
+                }
+            }
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    Blocks[x, y].Distance = 99999;
+                }
+            }
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    Blocks[x, y].LeafDecay(ref Blocks);
+                }
+            }
+            RemoveDeadLeaves();
         }
 
         // Add Recipes Below

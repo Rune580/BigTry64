@@ -258,6 +258,7 @@ namespace BigTry64
                                     treeY--;
                                     //Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
                                 }
+                                world.LeafCycle();
                                 //world.refreshLeaves();
                             }
                             else
