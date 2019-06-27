@@ -192,6 +192,23 @@ namespace BigTry64
                 {
                     await game.Display(message.Author.Id, message, true);
                 }
+                else if (TheMessage.StartsWith("SWAP"))
+                {
+                    try
+                    {
+                        TheMessage = TheMessage.Remove(0, "SWAP".Length);
+                        while (TheMessage[0] == ' ')
+                        {
+                            TheMessage = TheMessage.Remove(0, 1);
+                        }
+                        string[] Temp = TheMessage.Split(' ');
+                        await game.SwapItems(Temp[0][0], Temp[1][0], AuthorID, message);
+                    }
+                    catch
+                    {
+                        await message.Channel.SendMessageAsync("Something went wrong, you might have input an invalid range or in the incorrect format. Correct format (swap 1 1 1 4)");
+                    }
+                }
             }
 
 

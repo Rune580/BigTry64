@@ -286,6 +286,33 @@ namespace BigTry64
                 }
             }
         }
+        public async Task SwapItems(char item1, char item2, ulong ID, SocketMessage message)
+        {
+            foreach (var player in Players)
+            {
+                if (player.UserID == ID)
+                {
+                    int[] Item1 = LetterParsing.ParseString(item1);
+                    int[] Item2 = LetterParsing.ParseString(item2);
+                    player.SwapItem(Item1[0], Item1[1], Item2[0], Item2[1]);
+                    await Display(message.Author.Id, message, true);
+                }
+            }
+        }
+        public async Task HotBarChange(int Num, ulong ID, SocketMessage message)
+        {
+            foreach (var player in Players)
+            {
+                if (player.UserID == ID)
+                {
+                    if (Num-1 >= 0 && Num-1 <= 8)
+                    {
+                        player.HotBar = Num - 1;
+                        await Display(ID, message, false);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -303,6 +330,12 @@ namespace BigTry64
         public int Health;
         public Item[,] Inventory = new Item[9,4];
         public string World;
+        public void SwapItem(int X1, int Y1, int X2, int Y2)
+        {
+            Item Temp = Inventory[X1, Y1];
+            Inventory[X1, Y1] = Inventory[X2, Y2];
+            Inventory[X2, Y2] = Temp;
+        }
     }
     [Serializable]
     public class Mob : BaseMob
@@ -322,7 +355,9 @@ namespace BigTry64
             UserID = _UserID;
             World = _World;
             FilePath = _FilePath;
+            HotBar = 0;
         }
+        public int HotBar;
         public ulong UserID;
     }
 
@@ -397,7 +432,7 @@ namespace BigTry64
             {
                 Y--;
             }
-            if (Blocks[X - 1, Y].isTree || Blocks[X + 1, Y].isTree || Blocks[X, Y - 1].isTree || Blocks[X, Y + 1].isTree)
+            if (Blocks[X - 1, Y].Name == "oak" || Blocks[X + 1, Y].Name == "oak" || Blocks[X, Y - 1].Name == "oak" || Blocks[X, Y + 1].Name == "oak")
             {
                 _Distance = 1;
                 Distance = _Distance;

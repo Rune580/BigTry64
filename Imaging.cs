@@ -122,6 +122,7 @@ namespace BigTry64
                 int StartX = (viewFrame.Width / 2) - ((INV.Width * 2) / 2);
                 int StartY = (int)((viewFrame.Height / 1.2f) - (INV.Height * 1.5f));
 
+
                 graphics.DrawImage(INV, StartX, StartY, INV.Width * 2, INV.Height * 2);
                 for (int x = 0; x < player.Inventory.GetLength(0); x++)
                 {
@@ -145,6 +146,8 @@ namespace BigTry64
                         }
                     }
                 }
+                graphics.DrawImage(INV, StartX, StartY, INV.Width * 2, INV.Height * 2);
+                INV = (Bitmap)Image.FromFile(@"images/BT_inventoryletters.png");
             }
             else
             {
@@ -157,12 +160,18 @@ namespace BigTry64
                 {
                     for (int y = 0; y < player.Inventory.GetLength(1); y++)
                     {
+                        if (y == 3 && player.HotBar == x)
+                        {
+                            Console.WriteLine("HotBar");
+                            INV = (Bitmap)Image.FromFile(@"images/BT_invslot.png");
+                            graphics.DrawImage(INV, x + 32 + player.HotBar, StartY, INV.Width * 2, INV.Height * 2);
+                        }
                         if (player.Inventory[x, y] != null && y == 3)
                         {
                             if (player.Inventory[x, y].Count != 0)
                             {
                                 INV = (Bitmap)Image.FromFile(player.Inventory[x, y].Block.FilePath);
-                                graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + (16 + (64 * y)));
+                                graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + 16);
                             }
                         }
                     }
