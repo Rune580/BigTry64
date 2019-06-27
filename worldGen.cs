@@ -9,11 +9,14 @@ namespace BigTry64
     {
         public string Name;
         public Block[,] Blocks;
+        public Recipe[] Recipes;
         public World(string _Name, int _X, int _Y)
         {
             Name = _Name;
-            Blocks = new Block[_X,_Y];
+            Blocks = new Block[_X, _Y];
+            Recipes = new Recipe[100];
             genWorld();
+            addRecipes();
         }
 
         public void refreshLeaves()
@@ -22,17 +25,17 @@ namespace BigTry64
             {
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
-                    if (Blocks[x,y].Name == "leaves")
+                    if (Blocks[x, y].Name == "leaves")
                     {
                         Console.WriteLine($"found leaves at {x} , {y}");
                         for (int i = 0; i < 5; i++)
                         {
-                            Console.WriteLine(!Blocks[x+i,y].isTree);
+                            Console.WriteLine(!Blocks[x + i, y].isTree);
                             try
                             {
                                 if (!Blocks[x + i, y].isTree)
                                 {
-                                    Console.WriteLine(x+i);
+                                    Console.WriteLine(x + i);
                                     Blocks[x, y] = new Block(@"images/BT_air.png", "air", false);
                                 }
                             }
@@ -44,11 +47,11 @@ namespace BigTry64
                             {
                                 if (!Blocks[x - i, y].isTree)
                                 {
-                                    Console.WriteLine(x-i);
+                                    Console.WriteLine(x - i);
                                     Blocks[x, y] = new Block(@"images/BT_air.png", "air", false);
                                 }
                             }
-                            catch 
+                            catch
                             {
                             }
 
@@ -71,7 +74,7 @@ namespace BigTry64
                     grassTile = rand.Next(40, 60);
                     previousGrass = grassTile;
                 }
-                else if(x == 1)
+                else if (x == 1)
                 {
                     ppGrass = previousGrass;
                     grassTile = rand.Next(previousGrass - 1, previousGrass + 2);
@@ -89,7 +92,7 @@ namespace BigTry64
                 else
                 {
                     int Difference;
-                    int Odds = rand.Next(0,100);
+                    int Odds = rand.Next(0, 100);
                     Difference = ppGrass - previousGrass;
                     ppGrass = previousGrass;
                     if (Difference == -1)
@@ -149,7 +152,7 @@ namespace BigTry64
                 }
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
-                    int dirtTile = rand.Next(grassTile+1, grassTile+12);
+                    int dirtTile = rand.Next(grassTile + 1, grassTile + 12);
                     if (x == 0 || x == Blocks.GetLength(0) - 1 || y == 0 || y == Blocks.GetLength(1) - 1)
                     {
                         Blocks[x, y] = new Block(@"images/BT_bedrock.png", "unbreakable", true, _Breakable: false);
@@ -198,7 +201,7 @@ namespace BigTry64
                         Blocks[x, y] = new Block(@"images/BT_orediamond.png", "diamond", true, 35);
                     }
                 }
-                
+
             }
             genOre(4, 22, @"images/BT_orecoal.png", "coal");
             genOre(3, 40, @"images/BT_oreiron.png", "iron");
@@ -259,7 +262,7 @@ namespace BigTry64
             {
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
-                    Blocks[x, y].SetPos(x,y);
+                    Blocks[x, y].SetPos(x, y);
                 }
             }
             for (int x = 0; x < Blocks.GetLength(0); x++)
@@ -272,7 +275,7 @@ namespace BigTry64
             RemoveDeadLeaves();
             Console.WriteLine("WorldGen Complete");
         }
-        public void genOre(int passes, int reduction, string orepng, string orename, bool solid=true, string expandType = "stone", int offset = 0)
+        public void genOre(int passes, int reduction, string orepng, string orename, bool solid = true, string expandType = "stone", int offset = 0)
         {
             Random rand = new Random();
             for (int i = 0; i < passes; i++)
@@ -324,13 +327,13 @@ namespace BigTry64
         public void genCaves()
         {
             Random rand = new Random();
-            int numCaves = rand.Next(3, Blocks.GetLength(0)/20);
+            int numCaves = rand.Next(3, Blocks.GetLength(0) / 20);
             for (int i = 0; i < numCaves; i++)
             {
                 int x = rand.Next(0, Blocks.GetLength(0));
                 int y = rand.Next(0, Blocks.GetLength(1));
                 int length = 0;
-                
+
                 do
                 {
 
@@ -412,14 +415,14 @@ namespace BigTry64
             {
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
-                    if (Blocks[x,y].Name == "grass" || Blocks[x,y].Name == "darkstone")
+                    if (Blocks[x, y].Name == "grass" || Blocks[x, y].Name == "darkstone")
                     {
                         int Temp = rand.Next(4, 6);
                         for (int i = 1; i < Temp; i++)
                         {
-                            if (Blocks[x,y-i].Name == "leaves")
+                            if (Blocks[x, y - i].Name == "leaves")
                             {
-                                Blocks[x,y-i] = new Block(@"images/BT_air.png", "air", false, 60);
+                                Blocks[x, y - i] = new Block(@"images/BT_air.png", "air", false, 60);
                             }
                         }
                         break;
@@ -440,17 +443,22 @@ namespace BigTry64
                 }
             }
         }
-    }
 
-    [Serializable]
-    public class Tree
-    {
-        private int Height;
-        private int Branches;
-        private Block Blocks;
-        public Tree(int _Height, int _Branches, Block _Blocks)
+        // Add Recipes Below
+        public void addRecipes()
         {
+        }
 
+        [Serializable]
+        public class Tree
+        {
+            private int Height;
+            private int Branches;
+            private Block Blocks;
+            public Tree(int _Height, int _Branches, Block _Blocks)
+            {
+
+            }
         }
     }
 }
