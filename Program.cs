@@ -225,6 +225,11 @@ namespace BigTry64
                         await message.Channel.SendMessageAsync("Something went wrong, you might have input an invalid range or in the incorrect format. Correct format (swap 1 1 1 4)");
                     }
                 }
+                else if (TheMessage.StartsWith("SHOWCRAFTING"))
+                {
+                    await game.Display(message.Author.Id, message, false, true);
+                    await message.Channel.SendMessageAsync("enter the name of the item you want to craft.");
+                }
             }
 
 

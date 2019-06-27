@@ -40,7 +40,7 @@ namespace BigTry64
                 }
             }
         }
-        public async Task Display(ulong ID, SocketMessage message, bool Inventory = false)
+        public async Task Display(ulong ID, SocketMessage message, bool Inventory = false, bool crafting = false)
         {
             if (!IsIn(ID))
             {
@@ -54,7 +54,14 @@ namespace BigTry64
                     {
                         if (world.Name == item.World)
                         {
-                            await message.Channel.SendFileAsync(Screen.display(world, item.X, item.Y, Players, Mobs, item, Inventory));
+                            if (crafting)
+                            {
+
+                            }
+                            else
+                            {
+                                await message.Channel.SendFileAsync(Screen.display(world, item.X, item.Y, Players, Mobs, item, Inventory, crafting));
+                            }
                             break;
                         }
                     }
@@ -234,7 +241,7 @@ namespace BigTry64
                     {
                         if (world.Name == player.World)
                         {
-                            if (world.Blocks[player.X + _X, player.Y + _Y].Name != "air")
+                            if (world.Blocks[player.X + _X, player.Y + _Y].Name != "air" && world.Blocks[player.X + _X, player.Y + _Y].Breakable != false)
                             {
                                 bool FoundItem = false;
                                 for (int y = 0; y < player.Inventory.GetLength(1); y++)
@@ -292,6 +299,10 @@ namespace BigTry64
                                 world.LeafCycle();
                                 //world.refreshLeaves();
                             }
+                            else if (world.Blocks[player.X + _X, player.Y + _Y].backgroundBlock != null)
+                            {
+                                world.Blocks[player.X + _X, player.Y + _Y] = world.Blocks[player.X + _X, player.Y + _Y].backgroundBlock;
+                            }
                             else
                             {
                                 world.Blocks[player.X + _X, player.Y + _Y] = new Block(@"images/BT_air.png", "air", false, 60);
@@ -305,14 +316,12 @@ namespace BigTry64
             }
         }
         public void Gravity()
-        {
-            foreach (var player2 in Players)
-            {
-                foreach (var world in Worlds)
+        {            foreach (var player2 in Players)
+            {                foreach (var world in Worlds)
                 {
                     if (player2.World == world.Name)
                     {
-                        while (!world.Blocks[player2.X, player2.Y + 1].Solid)
+                        while (!world.Blocks[player2.X, player2.Y + 1].Solid && !world.Blocks[player2.X, player2.Y + 1].Ladder)
                         {
                             player2.Y++;
                         }

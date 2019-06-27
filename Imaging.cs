@@ -52,7 +52,7 @@ namespace BigTry64
             finalImage.Dispose();
             return output;
         }
-        public static string display(World world, int _x, int _y, List<Player> players, List<Mob> mobs, Player player, bool Inv)
+        public static string display(World world, int _x, int _y, List<Player> players, List<Mob> mobs, Player player, bool Inv, bool crafting)
         {
             Bitmap viewFrame;
             Bitmap block = null;
@@ -147,6 +147,20 @@ namespace BigTry64
                 }
                 INV = (Bitmap)Image.FromFile(@"images/BT_inventoryletters.png");
                 graphics.DrawImage(INV, StartX, StartY, INV.Width * 2, INV.Height * 2);
+            }
+            else if (crafting)
+            {
+                Bitmap INV = (Bitmap)Image.FromFile(@"images/BT_inventory.png");
+                int StartX = (viewFrame.Width / 2) - ((INV.Width * 2) / 2);
+                int StartY = (int)((viewFrame.Height / 1.2f) - (INV.Height * 1.5f));
+
+                for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                {
+                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                    {
+
+                    }
+                }
             }
             else
             {

@@ -182,19 +182,19 @@ namespace BigTry64
                     int oreDiamondTile = rand.Next(0, 200);
                     if (Blocks[x, y].Name == "stone" && oreCoalTile == 0)
                     {
-                        Blocks[x, y] = new Block(@"images/BT_orecoal.png", "coal", true, 100);
+                        Blocks[x, y] = new Block(@"images/BT_orecoal.png", "coal", true, 100, new Block(@"images/BT_darkstone.png", "darkstone", false));
                     }
                     else if (Blocks[x, y].Name == "stone" && oreIronTile == 0 && y > 60)
                     {
-                        Blocks[x, y] = new Block(@"images/BT_oreiron.png", "iron", true, 90);
+                        Blocks[x, y] = new Block(@"images/BT_oreiron.png", "iron", true, 90, new Block(@"images/BT_darkstone.png", "darkstone", false));
                     }
                     else if (Blocks[x, y].Name == "stone" && oreGoldTile == 0 && y > 100)
                     {
-                        Blocks[x, y] = new Block(@"images/BT_oregold.png", "gold", true, 55);
+                        Blocks[x, y] = new Block(@"images/BT_oregold.png", "gold", true, 55, new Block(@"images/BT_darkstone.png", "darkstone", false));
                     }
                     else if (Blocks[x, y].Name == "stone" && oreDiamondTile == 0 && y > 120)
                     {
-                        Blocks[x, y] = new Block(@"images/BT_orediamond.png", "diamond", true, 35);
+                        Blocks[x, y] = new Block(@"images/BT_orediamond.png", "diamond", true, 35, new Block(@"images/BT_darkstone.png", "darkstone", false));
                     }
                 }
 
@@ -284,7 +284,7 @@ namespace BigTry64
             }
             Console.WriteLine("WorldGen Complete");
         }
-        public void genOre(int passes, int reduction, string orepng, string orename, bool solid = true, string expandType = "stone", int offset = 0)
+        public void genOre(int passes, int reduction, string orepng, string orename, bool solid = true, string expandType = "stone", bool underground = true, int offset = 0)
         {
             Random rand = new Random();
             for (int i = 0; i < passes; i++)
@@ -297,28 +297,36 @@ namespace BigTry64
                         {
                             if (Blocks[x, y].Name == orename)
                             {
-
+                                Block background;
+                                if (underground)
+                                {
+                                    background = new Block(@"images/BT_darkstone.png", "darkstone", false);
+                                }
+                                else
+                                {
+                                    background = null;
+                                }
                                 int chance = Blocks[x, y].Chance;
                                 int expandChance;
                                 expandChance = rand.Next(0, 100);
                                 if (Blocks[x - 1, y].Chance < expandChance && Blocks[x - 1, y].Name == expandType)
                                 {
-                                    Blocks[x - 1, y] = new Block(orepng, orename, solid, chance - reduction);
+                                    Blocks[x - 1, y] = new Block(orepng, orename, solid, chance - reduction, background);
                                 }
                                 expandChance = rand.Next(0, 100);
                                 if (Blocks[x + 1, y].Chance < expandChance && Blocks[x + 1, y].Name == expandType)
                                 {
-                                    Blocks[x + 1, y] = new Block(orepng, orename, solid, chance - reduction);
+                                    Blocks[x + 1, y] = new Block(orepng, orename, solid, chance - reduction, background);
                                 }
                                 expandChance = rand.Next(0, 100);
                                 if (Blocks[x, y - 1].Chance < expandChance && Blocks[x, y - 1].Name == expandType)
                                 {
-                                    Blocks[x, y - 1] = new Block(orepng, orename, solid, chance - reduction);
+                                    Blocks[x, y - 1] = new Block(orepng, orename, solid, chance - reduction, background);
                                 }
                                 expandChance = rand.Next(0, 100);
                                 if (Blocks[x, y + 1].Chance < expandChance && Blocks[x, y + 1].Name == expandType)
                                 {
-                                    Blocks[x, y + 1] = new Block(orepng, orename, solid, chance - reduction);
+                                    Blocks[x, y + 1] = new Block(orepng, orename, solid, chance - reduction, background);
                                 }
 
                             }
@@ -483,11 +491,13 @@ namespace BigTry64
         {
             //Blocks
             Block oak = new Block(@"images/BT_oaklog.png", "oak", true);
-            Block plank = new Block(@"images/awful_wood.png", "plank", true);
+            Block plank = new Block(@"images/BT_oakplank.png", "plank", true);
             Block craftstation = new Block(@"images/craftingstation.png", "craftingstation", false);
             Block torch = new Block(@"images/torch.png", "torch", false);
             Block ladder = new Block(@"images/ladder.png", "ladder", false, _Ladder: true);
             Block coalOre = new Block(@"images/BT_orecoal.png", "coalore", true);
+            Block stone = new Block(@"images/BT_stone.png", "stone", true);
+            Block furnacestation = new Block(@"images/BT_furnacestation.png", "furnacestation", true);
 
 
             //Items
@@ -498,6 +508,8 @@ namespace BigTry64
             Item torchItem = new Item(torch, "block");
             Item ladderItem = new Item(ladder, "block");
             Item coal = new Item(coalOre, "item");
+            Item stoneItem4 = new Item(stone, "block", 4);
+            Item furnaceItem = new Item(furnacestation, "block");
 
 
             //Player Recipes
@@ -505,6 +517,10 @@ namespace BigTry64
             Recipes[1] = new Recipe(new Item[] {plankItem4}, new Item[] {craftingItem}, "player");
             Recipes[2] = new Recipe(new Item[] {plankItem, coal}, new Item[] {torchItem}, "player");
             Recipes[3] = new Recipe(new Item[] {plankItem}, new Item[] {ladderItem}, "player");
+
+
+            //Crafting Station Recipes
+            Recipes[4] = new Recipe(new Item[] { stoneItem4 }, new Item[] { furnaceItem }, "craftingStation");
         }
     }
 }
