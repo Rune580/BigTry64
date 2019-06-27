@@ -177,7 +177,7 @@ namespace BigTry64
                                         TempY++;
                                     }
                                 }
-                                while (!item.Blocks[TempX, TempY+1].Solid)
+                                while (!item.Blocks[TempX, TempY+1].Solid && !item.Blocks[TempX, TempY + 1].Ladder && !item.Blocks[TempX, TempY].Ladder)
                                 {
                                     TempY++;
                                 }
@@ -321,7 +321,7 @@ namespace BigTry64
                 {
                     if (player2.World == world.Name)
                     {
-                        while (!world.Blocks[player2.X, player2.Y + 1].Solid && !world.Blocks[player2.X, player2.Y + 1].Ladder)
+                        while (!world.Blocks[player2.X, player2.Y + 1].Solid && !world.Blocks[player2.X, player2.Y + 1].Ladder && !world.Blocks[player2.X, player2.Y].Ladder)
                         {
                             player2.Y++;
                         }
