@@ -9,11 +9,14 @@ namespace BigTry64
     {
         public string Name;
         public Block[,] Blocks;
+        public Recipe[] Recipes;
         public World(string _Name, int _X, int _Y)
         {
             Name = _Name;
             Blocks = new Block[_X,_Y];
+            Recipes = new Recipe[100];
             genWorld();
+            addRecipes();
         }
 
         public void refreshLeaves()
@@ -440,7 +443,11 @@ namespace BigTry64
                 }
             }
         }
-    }
+
+        // Add Recipes Below
+        public void addRecipes()
+        {
+        }
 
     [Serializable]
     public class Tree

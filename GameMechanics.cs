@@ -343,14 +343,14 @@ namespace BigTry64
     [Serializable]
     public class Recipe
     {
-        public Recipe(List<string> _inputItems, List<string> _outputItems, string _craftingHandler)
+        public Recipe(List<Item> _inputItems, List<Item> _outputItems, string _craftingHandler)
         {
             inputItems = _inputItems;
             outputItems = _outputItems;
             craftingHandler = _craftingHandler;
         }
-        public List<string> inputItems;
-        public List<string> outputItems;
+        public List<Item> inputItems;
+        public List<Item> outputItems;
         public string craftingHandler;
     }
 
