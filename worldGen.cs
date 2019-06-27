@@ -153,11 +153,7 @@ namespace BigTry64
                 for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
                     int dirtTile = rand.Next(grassTile + 1, grassTile + 12);
-                    if (x == 0 || x == Blocks.GetLength(0) - 1 || y == 0 || y == Blocks.GetLength(1) - 1)
-                    {
-                        Blocks[x, y] = new Block(@"images/BT_bedrock.png", "unbreakable", true, _Breakable: false);
-                    }
-                    else if (y < grassTile)
+                    if (y < grassTile)
                     {
                         Blocks[x, y] = new Block(@"images/BT_air.png", "air", false, 60, _Breakable: false);
                     }
@@ -258,6 +254,34 @@ namespace BigTry64
             genOre(3, 20, @"images/BT_leaves.png", "leaves", false, "air");
             removeLeaves();
             LeafCycle();
+
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    Blocks[x, y].SetPos(x, y);
+                }
+            }
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    Blocks[x, y].LeafDecay(ref Blocks);
+                }
+            }
+            RemoveDeadLeaves();
+
+            // Barrier Time!
+            for (int x = 0; x < Blocks.GetLength(0); x++)
+            {
+                for (int y = 0; y < Blocks.GetLength(1); y++)
+                {
+                    if (x == 0 || x == Blocks.GetLength(0) - 1 || y == 0 || y == Blocks.GetLength(1) - 1)
+                    {
+                        Blocks[x, y] = new Block(@"images/BT_bedrock.png", "unbreakable", true, _Breakable: false);
+                    }
+                }
+            }
             Console.WriteLine("WorldGen Complete");
         }
         public void genOre(int passes, int reduction, string orepng, string orename, bool solid = true, string expandType = "stone", int offset = 0)
@@ -312,7 +336,7 @@ namespace BigTry64
         public void genCaves()
         {
             Random rand = new Random();
-            int numCaves = rand.Next(3, Blocks.GetLength(0) / 20);
+            int numCaves = rand.Next(5, Blocks.GetLength(0) / 20);
             for (int i = 0; i < numCaves; i++)
             {
                 int x = rand.Next(0, Blocks.GetLength(0));
@@ -341,7 +365,7 @@ namespace BigTry64
                         {
                             Blocks[x, y + 1] = new Block(@"images/BT_darkstone.png", "darkstone", false, _Breakable: false);
                         }
-                        int clamp = rand.Next(0, 300);
+                        int clamp = rand.Next(0, 310);
                         if (length < 600)
                         {
                             length++;
@@ -354,7 +378,7 @@ namespace BigTry64
                             }
                         }
                         int _x = rand.Next(0, 2);
-                        int _y = rand.Next(0, 18);
+                        int _y = rand.Next(0, 19);
                         switch (_x)
                         {
                             case 0:
@@ -457,6 +481,7 @@ namespace BigTry64
         // Add Recipes Below
         public void addRecipes()
         {
+            //Recipes[0] = new Recipe();
         }
 
         [Serializable]
