@@ -73,7 +73,7 @@ namespace BigTry64
             }
             return false;
         }
-        public async Task MovePlayer(ulong ID, string Direction, int Count, SocketMessage message)
+        public async Task MovePlayer(ulong ID, string Direction, int Count, SocketMessage message, bool Jump = false)
         {
             if (!IsIn(ID))
             {
@@ -96,10 +96,18 @@ namespace BigTry64
                     }
                     else if (Direction == "LEFT")
                     {
+                        if (Jump)
+                        {
+                            _Y = -1;
+                        }
                         _X = -1;
                     }
                     else if (Direction == "RIGHT")
                     {
+                        if (Jump)
+                        {
+                            _Y = -1;
+                        }
                         _X = 1;
                     }
                     foreach (var item in Worlds)
@@ -129,9 +137,9 @@ namespace BigTry64
                                 }
 
 
-                                if (item.Blocks[TempX,TempY].Solid && (Direction == "LEFT" || Direction == "RIGHT"))
+                                if (item.Blocks[TempX,TempY].Solid && (Direction == "LEFT" || Direction == "RIGHT") && !Jump)
                                 {
-                                    if (!item.Blocks[TempX,TempY-1].Solid)
+                                    if (!item.Blocks[TempX, TempY - 1].Solid && item.Blocks[TempX, TempY].Solid)
                                     {
                                         TempY--;
                                     }
@@ -144,6 +152,23 @@ namespace BigTry64
                                 else if (item.Blocks[TempX, TempY].Solid && Direction == "DOWN")
                                 {
                                     TempY--;
+                                }
+                                if (Jump)
+                                {
+                                    Count = 0;
+                                    if (!item.Blocks[TempX, TempY-1].Solid && item.Blocks[TempX, TempY].Solid)
+                                    {
+                                        TempY -= 1;
+                                    }
+                                    else if (item.Blocks[TempX + _X, TempY + 1].Solid && !item.Blocks[TempX + _X, TempY].Solid)
+                                    {
+                                        TempX += _X;
+                                    }
+                                    else if (!item.Blocks[TempX + _X, TempY + 1].Solid)
+                                    {
+                                        TempX += _X;
+                                        TempY++;
+                                    }
                                 }
                                 while (!item.Blocks[TempX, TempY+1].Solid)
                                 {
@@ -240,6 +265,7 @@ namespace BigTry64
                                             if (player.Inventory[x, y] == null)
                                             {
                                                 player.Inventory[x, y] = new Item(world.Blocks[player.X + _X, player.Y + _Y], "block");
+                                                player.Inventory[x, y].Name = world.Blocks[player.X + _X, player.Y + _Y].Name;
                                                 FoundItem = true;
                                                 break;
                                             }
@@ -280,14 +306,8 @@ namespace BigTry64
         }
         public void Gravity()
         {
-            for (int i = 0; i < Players.Count; i++)
-            {
-
-            }
-            Console.WriteLine(Players.Count);
             foreach (var player2 in Players)
             {
-                Console.WriteLine(Players.Count);
                 foreach (var world in Worlds)
                 {
                     if (player2.World == world.Name)
@@ -298,7 +318,6 @@ namespace BigTry64
                         }
                     }
                 }
-                break;
             }
         }
         public async Task SwapItems(char item1, char item2, ulong ID, SocketMessage message)

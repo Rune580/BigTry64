@@ -80,8 +80,18 @@ namespace BigTry64
                 {
                     game.SpawnPlayer(AuthorID, message);
                 }
-                else if ((TheMessage.StartsWith("UP") || TheMessage.StartsWith("DOWN") || TheMessage.StartsWith("LEFT") || TheMessage.StartsWith("RIGHT")))
+                else if ((TheMessage.StartsWith("UP") || TheMessage.StartsWith("DOWN") || TheMessage.StartsWith("LEFT") || TheMessage.StartsWith("RIGHT") || TheMessage.StartsWith("JUMP")))
                 {
+                    bool Jump = false;
+                    if (TheMessage.StartsWith("JUMP"))
+                    {
+                        Jump = true;
+                        TheMessage = TheMessage.Remove(0,"JUMP".Length);
+                        while (TheMessage[0] == ' ')
+                        {
+                            TheMessage = TheMessage.Remove(0, 1);
+                        }
+                    }
                     string Direction = "";
                     if (TheMessage.StartsWith("UP"))
                     {
@@ -107,11 +117,17 @@ namespace BigTry64
                     {
                         try
                         {
-                            await game.MovePlayer(AuthorID, Direction, int.Parse(TheMessage), message);
+                            await game.MovePlayer(AuthorID, Direction, int.Parse(TheMessage), message, Jump);
                         }
                         catch
                         {
-                            await game.MovePlayer(AuthorID, Direction, 1, message);
+                            try
+                            {
+                                await game.MovePlayer(AuthorID, Direction, 1, message, Jump);
+                            }
+                            catch
+                            {
+                            }
                         }
                     }
                 }
