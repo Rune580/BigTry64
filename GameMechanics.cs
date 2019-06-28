@@ -176,6 +176,11 @@ namespace BigTry64
                                         TempX += _X;
                                         TempY++;
                                     }
+                                    else
+                                    {
+                                        TempX = player.X;
+                                        TempY = player.Y;
+                                    }
                                 }
                                 while (!item.Blocks[TempX, TempY+1].Solid && !item.Blocks[TempX, TempY + 1].Ladder && !item.Blocks[TempX, TempY].Ladder)
                                 {
@@ -265,7 +270,7 @@ namespace BigTry64
                                 }
                                 if (!FoundItem)
                                 {
-                                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                                    for (int y = player.Inventory.GetLength(1)-1; y >= 0; y--)
                                     {
                                         for (int x = 0; x < player.Inventory.GetLength(0); x++)
                                         {
@@ -292,6 +297,48 @@ namespace BigTry64
                                 //Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
                                 while (world.Blocks[treeX, treeY].Name == "oak")
                                 {
+                                    #region dont open this
+                                    bool FoundItem = false;
+                                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                                    {
+                                        for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                                        {
+                                            if (player.Inventory[x, y] != null)
+                                            {
+                                                if (player.Inventory[x, y].Name == world.Blocks[treeX, treeY].Name && player.Inventory[x, y].Count != 50)
+                                                {
+                                                    player.Inventory[x, y].Count++;
+                                                    FoundItem = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (FoundItem)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    if (!FoundItem)
+                                    {
+                                        for (int y = player.Inventory.GetLength(1) - 1; y >= 0; y--)
+                                        {
+                                            for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                                            {
+                                                if (player.Inventory[x, y] == null)
+                                                {
+                                                    player.Inventory[x, y] = new Item(world.Blocks[treeX, treeY], "block");
+                                                    player.Inventory[x, y].Name = world.Blocks[treeX, treeY].Name;
+                                                    FoundItem = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (FoundItem)
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    #endregion
                                     world.Blocks[treeX, treeY] = new Block(@"images/BT_air.png", "air", false, 60);
                                     treeY--;
                                     //Console.WriteLine($"{treeX}, {treeY}: {world.Blocks[treeX, treeY].Name}");
@@ -308,6 +355,100 @@ namespace BigTry64
                                 world.Blocks[player.X + _X, player.Y + _Y] = new Block(@"images/BT_air.png", "air", false, 60);
                             }
                             Gravity();
+                            await Display(ID, message);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        public async Task PlaceBlock(ulong ID, string Direction1, string Direction2, SocketMessage message)
+        {
+            Direction1 = Direction1.ToUpper();
+            Direction2 = Direction2.ToUpper();
+            foreach (var player in Players)
+            {
+                if (player.UserID == ID)
+                {
+                    int _X = 0;
+                    int _Y = 0;
+                    if (Direction1 != Direction2)
+                    {
+                        if (Direction1 == "UP")
+                        {
+                            _Y += -1;
+                        }
+                        else if (Direction1 == "DOWN")
+                        {
+                            _Y += 1;
+                        }
+                        else if (Direction1 == "LEFT")
+                        {
+                            _X += -1;
+                        }
+                        else if (Direction1 == "RIGHT")
+                        {
+                            _X += 1;
+                        }
+                        if (Direction2 == "UP")
+                        {
+                            _Y += -1;
+                        }
+                        else if (Direction2 == "DOWN")
+                        {
+                            _Y += 1;
+                        }
+                        else if (Direction2 == "LEFT")
+                        {
+                            _X += -1;
+                        }
+                        else if (Direction2 == "RIGHT")
+                        {
+                            _X += 1;
+                        }
+                    }
+                    foreach (var world in Worlds)
+                    {
+                        if (world.Name == player.World)
+                        {
+                            bool PlayerCollide = false;
+                            foreach (var player2 in Players)
+                            {
+                                if (player2.UserID != player.UserID && player2.X == player.X + _X && player2.Y == player.Y + _Y)
+                                {
+                                    PlayerCollide = true;
+                                }
+                            }
+                            if (!world.Blocks[player.X + _X, player.Y].Solid && !PlayerCollide)
+                            {
+                                try
+                                {
+                                    if (_X == 0 && _Y == 0 && !world.Blocks[player.X, player.Y - 1].Solid && !world.Blocks[player.X, player.Y - 1].isTree)
+                                    {
+                                        world.Blocks[player.X + _X, player.Y + _Y] = player.Inventory[player.HotBar, 3].Block;
+                                        if (world.Blocks[player.X + _X, player.Y + _Y].isTree)
+                                        {
+                                            world.Blocks[player.X + _X, player.Y + _Y].isTree = false;
+                                            world.Blocks[player.X + _X, player.Y + _Y].Solid = true;
+                                        }
+                                        player.Inventory[player.HotBar, 3].Count--;
+                                        player.Y--;
+                                    }
+                                    else if (_X != 0 || _Y != 0)
+                                    {
+                                        world.Blocks[player.X + _X, player.Y + _Y] = player.Inventory[player.HotBar, 3].Block;
+                                        if (world.Blocks[player.X + _X, player.Y + _Y].isTree)
+                                        {
+                                            world.Blocks[player.X + _X, player.Y + _Y].isTree = false;
+                                            world.Blocks[player.X + _X, player.Y + _Y].Solid = true;
+                                        }
+                                        player.Inventory[player.HotBar, 3].Count--;
+                                    }
+                                }
+                                catch
+                                {
+                                }
+                            }
                             await Display(ID, message);
                         }
                     }

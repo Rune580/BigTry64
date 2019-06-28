@@ -200,6 +200,75 @@ namespace BigTry64
                     }
                     await game.BreakBlock(AuthorID, Direction1, Direction2, message);
                 }
+                else if ((TheMessage.StartsWith("PUP") || TheMessage.StartsWith("PDOWN") || TheMessage.StartsWith("PLEFT") || TheMessage.StartsWith("PRIGHT") || TheMessage.StartsWith("PHERE")))
+                {
+                    string Direction1 = "";
+                    string Direction2 = "";
+                    if (TheMessage.StartsWith("PUP"))
+                    {
+                        Direction1 = "UP";
+                        TheMessage = TheMessage.Remove(0, "PUP".Length);
+                    }
+                    else if (TheMessage.StartsWith("PDOWN"))
+                    {
+                        Direction1 = "DOWN";
+                        TheMessage = TheMessage.Remove(0, "PDOWN".Length);
+                    }
+                    else if (TheMessage.StartsWith("PLEFT"))
+                    {
+                        Direction1 = "LEFT";
+                        TheMessage = TheMessage.Remove(0, "PLEFT".Length);
+                    }
+                    else if (TheMessage.StartsWith("PRIGHT"))
+                    {
+                        Direction1 = "RIGHT";
+                        TheMessage = TheMessage.Remove(0, "PRIGHT".Length);
+                    }
+                    else if (TheMessage.StartsWith("PHERE"))
+                    {
+                        Direction1 = "HERE";
+                        TheMessage = TheMessage.Remove(0, "PHERE".Length);
+                    }
+
+                    try
+                    {
+                        while (TheMessage[0] == ' ')
+                        {
+                            TheMessage = TheMessage.Remove(0, 1);
+                        }
+
+
+                        if (TheMessage.StartsWith("PUP"))
+                        {
+                            Direction2 = "UP";
+                            TheMessage = TheMessage.Remove(0, "PUP".Length);
+                        }
+                        else if (TheMessage.StartsWith("PDOWN"))
+                        {
+                            Direction2 = "DOWN";
+                            TheMessage = TheMessage.Remove(0, "PDOWN".Length);
+                        }
+                        else if (TheMessage.StartsWith("PLEFT"))
+                        {
+                            Direction2 = "LEFT";
+                            TheMessage = TheMessage.Remove(0, "PLEFT".Length);
+                        }
+                        else if (TheMessage.StartsWith("PRIGHT"))
+                        {
+                            Direction2 = "RIGHT";
+                            TheMessage = TheMessage.Remove(0, "PRIGHT".Length);
+                        }
+                        else if (TheMessage.StartsWith("PHERE"))
+                        {
+                            Direction2 = "HERE";
+                            TheMessage = TheMessage.Remove(0, "PHERE".Length);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    await game.PlaceBlock(AuthorID, Direction1, Direction2, message);
+                }
                 else if (TheMessage.StartsWith("SAVEWORLD"))
                 {
                     BinarySave();
@@ -229,6 +298,21 @@ namespace BigTry64
                 {
                     await game.Display(message.Author.Id, message, false, true);
                     await message.Channel.SendMessageAsync("enter the name of the item you want to craft.");
+                }
+                else if (TheMessage.StartsWith("HOTBAR"))
+                {
+                    TheMessage = TheMessage.Remove(0, "HOTBAR".Length);
+                    while (TheMessage[0] == ' ')
+                    {
+                        TheMessage = TheMessage.Remove(0, 1);
+                    }
+                    try
+                    {
+                        await game.HotBarChange(int.Parse(TheMessage), AuthorID, message);
+                    }
+                    catch
+                    {
+                    }
                 }
             }
 

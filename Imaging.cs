@@ -134,12 +134,30 @@ namespace BigTry64
                                 if (y == 3)
                                 {
                                     INV = (Bitmap)Image.FromFile(player.Inventory[x, y].Block.FilePath);
-                                    graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + (16 + (64 * y)) + 32);
+                                    int X = StartX + (16 + (64 * x));
+                                    int Y = StartY + (16 + (64 * y)) + 32;
+                                    graphics.DrawImage(INV, X, Y);
+
+                                    if (player.Inventory[x, y].Count != 1)
+                                    {
+                                        Font f = new Font("Comic Sans MS", 16);
+                                        SolidBrush b = new SolidBrush(Color.White);
+                                        graphics.DrawString($"{player.Inventory[x, y].Count}", f, b, X + 18, Y + 15);
+                                    }
                                 }
                                 else
                                 {
                                     INV = (Bitmap)Image.FromFile(player.Inventory[x, y].Block.FilePath);
-                                    graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + (16 + (64 * y)));
+                                    int X = StartX + (16 + (64 * x));
+                                    int Y = StartY + (16 + (64 * y));
+                                    graphics.DrawImage(INV, X, Y);
+
+                                    if (player.Inventory[x, y].Count != 1)
+                                    {
+                                        Font f = new Font("Comic Sans MS", 16);
+                                        SolidBrush b = new SolidBrush(Color.White);
+                                        graphics.DrawString($"{player.Inventory[x, y].Count}", f, b, X + 18, Y + 15);
+                                    }
                                 }
                             }
                         }
@@ -176,18 +194,29 @@ namespace BigTry64
                         if (y == 3 && player.HotBar == x)
                         {
                             INV = (Bitmap)Image.FromFile(@"images/BT_invslot.png");
-                            graphics.DrawImage(INV, x + 32 + player.HotBar, StartY, INV.Width * 2, INV.Height * 2);
+                            graphics.DrawImage(INV,32 + (64 * (player.HotBar)), StartY, INV.Width * 2, INV.Height * 2);
                         }
                         if (player.Inventory[x, y] != null && y == 3)
                         {
                             if (player.Inventory[x, y].Count != 0)
                             {
                                 INV = (Bitmap)Image.FromFile(player.Inventory[x, y].Block.FilePath);
-                                graphics.DrawImage(INV, StartX + (16 + (64 * x)), StartY + 16);
+                                int X = StartX + (16 + (64 * x));
+                                int Y = StartY + 16;
+                                graphics.DrawImage(INV, X, Y);
+
+                                if (player.Inventory[x, y].Count != 1)
+                                {
+                                    Font f = new Font("Comic Sans MS", 16);
+                                    SolidBrush b = new SolidBrush(Color.White);
+                                    graphics.DrawString($"{player.Inventory[x, y].Count}", f, b, X + 18, Y + 15);
+                                }
                             }
                         }
                     }
                 }
+                INV = (Bitmap)Image.FromFile(@"images/BT_hotbarletters.png");
+                graphics.DrawImage(INV, StartX, StartY, INV.Width * 2, INV.Height * 2);
             }
             string output = @"images/output.png";
             finalImage.Save(output);
