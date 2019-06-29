@@ -10,6 +10,7 @@ namespace BigTry64
         {
             switch (character)
             {
+
                 case 'Q':
                     return new int[] { 0, 0 };
                 case 'W':
