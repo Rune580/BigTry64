@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigTry64", "BigTry64.csproj", "{A68E5E71-35BB-437A-9BAE-7E202A102972}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeAnExe", "..\MakeAnExe\MakeAnExe.csproj", "{3EAE921A-F3E1-440F-BB08-7F140D2666AD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{A68E5E71-35BB-437A-9BAE-7E202A102972}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A68E5E71-35BB-437A-9BAE-7E202A102972}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A68E5E71-35BB-437A-9BAE-7E202A102972}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EAE921A-F3E1-440F-BB08-7F140D2666AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EAE921A-F3E1-440F-BB08-7F140D2666AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EAE921A-F3E1-440F-BB08-7F140D2666AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EAE921A-F3E1-440F-BB08-7F140D2666AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
