@@ -297,7 +297,34 @@ namespace BigTry64
                 else if (TheMessage.StartsWith("SHOWCRAFTING"))
                 {
                     await game.Display(message.Author.Id, message, false, true);
-                    await message.Channel.SendMessageAsync("enter the name of the item you want to craft.");
+                    await message.Channel.SendMessageAsync("to craft an item, Type: craft 'itemname' 'amount'");
+                }
+                else if (TheMessage.StartsWith("CRAFT"))
+                {
+                    try
+                    {
+                        TheMessage = TheMessage.Remove(0, "CRAFT".Length);
+                        while (TheMessage[0] == ' ') 
+                        {
+                            TheMessage = TheMessage.Remove(0, 1);
+                        }
+                        string[] _message = TheMessage.Split(' ');
+                        await game.CraftItems(_message[0], Int32.Parse(_message[1]), AuthorID, message);
+                    }
+                    catch (System.IndexOutOfRangeException e)
+                    {
+                        TheMessage = TheMessage.Remove(0, "CRAFT".Length);
+                        while (TheMessage[0] == ' ')
+                        {
+                            TheMessage = TheMessage.Remove(0, 1);
+                        }
+                        await game.CraftItems(TheMessage, 1, AuthorID, message);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        await message.Channel.SendMessageAsync("Something went wrong with the input, the expect input should look similar to ex: craft plank 10 (craft 'itemname' 'amount')");
+                    }
                 }
                 else if (TheMessage.StartsWith("HOTBAR"))
                 {

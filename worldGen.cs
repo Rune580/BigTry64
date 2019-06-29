@@ -14,7 +14,7 @@ namespace BigTry64
         {
             Name = _Name;
             Blocks = new Block[_X,_Y];
-            Recipes = new Recipe[100];
+            Recipes = new Recipe[6];
             genWorld();
             InitRecipes();
         }
@@ -494,10 +494,12 @@ namespace BigTry64
             Block plank = new Block(@"images/BT_oakplank.png", "plank", true);
             Block craftstation = new Block(@"images/craftingstation.png", "craftingstation", false);
             Block torch = new Block(@"images/torch.png", "torch", false);
-            Block ladder = new Block(@"images/ladder.png", "ladder", false, _Ladder: true);
+            Block ladder = new Block(@"images/BT_ladder.png", "ladder", false, _Ladder: true);
             Block coalOre = new Block(@"images/BT_orecoal.png", "coalore", true);
             Block stone = new Block(@"images/BT_stone.png", "stone", true);
             Block furnacestation = new Block(@"images/BT_furnacestation.png", "furnacestation", true);
+            Block ironOre = new Block(@"images/BT_oreiron.png", "ironore", true);
+            Block iron = new Block(@"images/BT_bariron.png", "bariron", false);
 
 
             //Items
@@ -507,20 +509,26 @@ namespace BigTry64
             Item craftingItem = new Item(craftstation, "block");
             Item torchItem = new Item(torch, "block");
             Item ladderItem = new Item(ladder, "block");
-            Item coal = new Item(coalOre, "item");
+            Item coal = new Item(coalOre, "block");
             Item stoneItem4 = new Item(stone, "block", 4);
             Item furnaceItem = new Item(furnacestation, "block");
+            Item ironOreItem = new Item(ironOre, "block");
+            Item ironIngot = new Item(iron, "item");
 
 
             //Player Recipes
             Recipes[0] = new Recipe(new Item[] {oakItem}, new Item[] {plankItem4}, "player");
             Recipes[1] = new Recipe(new Item[] {plankItem4}, new Item[] {craftingItem}, "player");
-            Recipes[2] = new Recipe(new Item[] {plankItem, coal}, new Item[] {torchItem}, "player");
+            Recipes[2] = new Recipe(new Item[] {coal}, new Item[] {torchItem}, "player");
             Recipes[3] = new Recipe(new Item[] {plankItem}, new Item[] {ladderItem}, "player");
 
 
             //Crafting Station Recipes
             Recipes[4] = new Recipe(new Item[] { stoneItem4 }, new Item[] { furnaceItem }, "craftingStation");
+
+            //Furnace Station Recipes
+            Recipes[5] = new Recipe(new Item[] { ironOreItem }, new Item[] { ironIngot }, "furnaceStation");
+
         }
     }
 }

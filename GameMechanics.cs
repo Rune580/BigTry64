@@ -54,14 +54,7 @@ namespace BigTry64
                     {
                         if (world.Name == item.World)
                         {
-                            if (crafting)
-                            {
-
-                            }
-                            else
-                            {
-                                await message.Channel.SendFileAsync(Screen.display(world, item.X, item.Y, Players, Mobs, item, Inventory, crafting));
-                            }
+                            await message.Channel.SendFileAsync(Screen.display(world, item.X, item.Y, Players, Mobs, item, Inventory, crafting));
                             break;
                         }
                     }
@@ -246,7 +239,7 @@ namespace BigTry64
                     {
                         if (world.Name == player.World)
                         {
-                            if (world.Blocks[player.X + _X, player.Y + _Y].Name != "air" && world.Blocks[player.X + _X, player.Y + _Y].Breakable != false)
+                            if (world.Blocks[player.X + _X, player.Y + _Y].Name != "air" && world.Blocks[player.X + _X, player.Y + _Y].Name != "darkstone" && world.Blocks[player.X + _X, player.Y + _Y].Name != "unbreakable" && world.Blocks[player.X + _X, player.Y + _Y].Breakable != false)
                             {
                                 bool FoundItem = false;
                                 for (int y = 0; y < player.Inventory.GetLength(1); y++)
@@ -350,7 +343,7 @@ namespace BigTry64
                             {
                                 world.Blocks[player.X + _X, player.Y + _Y] = world.Blocks[player.X + _X, player.Y + _Y].backgroundBlock;
                             }
-                            else
+                            else if (world.Blocks[player.X + _X, player.Y + _Y].Name != "darkstone")
                             {
                                 world.Blocks[player.X + _X, player.Y + _Y] = new Block(@"images/BT_air.png", "air", false, 60);
                             }
@@ -423,7 +416,7 @@ namespace BigTry64
                             {
                                 try
                                 {
-                                    if (_X == 0 && _Y == 0 && !world.Blocks[player.X, player.Y - 1].Solid && !world.Blocks[player.X, player.Y - 1].isTree)
+                                    if (_X == 0 && _Y == 0 && !world.Blocks[player.X, player.Y - 1].Solid && !world.Blocks[player.X, player.Y - 1].isTree && player.Inventory[player.HotBar, 3].Count > 0)
                                     {
                                         world.Blocks[player.X + _X, player.Y + _Y] = player.Inventory[player.HotBar, 3].Block;
                                         if (world.Blocks[player.X + _X, player.Y + _Y].isTree)
@@ -443,6 +436,10 @@ namespace BigTry64
                                             world.Blocks[player.X + _X, player.Y + _Y].Solid = true;
                                         }
                                         player.Inventory[player.HotBar, 3].Count--;
+                                    }
+                                    if (player.Inventory[player.HotBar, 3].Count == 0)
+                                    {
+                                        player.Inventory[player.HotBar, 3] = null;
                                     }
                                 }
                                 catch
@@ -469,6 +466,137 @@ namespace BigTry64
                     }
                 }
             }
+        }
+        public async Task CraftItems(string craftItem, int amount, ulong ID, SocketMessage message)
+        {
+            craftItem = craftItem.ToLower();
+            Item givetoPlayer = null;
+            foreach (var player in Players)
+            {
+                foreach (var world in Worlds)
+                {
+                    if (player.World == world.Name)
+                    {
+                        if (player.UserID == ID)
+                        {
+                            for (int i = 0; i < world.Recipes.Length; i++)
+                            {
+                                if (world.Recipes[i].craftingHandler == "craftingStation" && !player.craftingstation)
+                                {
+                                    break;
+                                }
+                                if (world.Recipes[i].craftingHandler == "furnaceStation" && !player.furnacestation)
+                                {
+                                    break;
+                                }
+                                for (int _i = 0; _i < world.Recipes[i].inputItems.Length; _i++)
+                                {
+                                    for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                                    {
+                                        for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                                        {
+                                            if (player.Inventory[x, y] != null)
+                                            {
+                                                if (player.Inventory[x, y].Block.Name == world.Recipes[i].inputItems[_i].Block.Name || player.Inventory[x, y].Block.Name == world.Recipes[i].inputItems[_i].Name)
+                                                {
+                                                    while (player.Inventory[x, y].Count < (world.Recipes[i].inputItems[_i].Count * amount))
+                                                    {
+                                                        amount--;
+                                                    }
+                                                    if (craftItem == world.Recipes[i].outputItems[0].Block.Name)
+                                                    {
+                                                        givetoPlayer = world.Recipes[i].outputItems[0];
+                                                        givetoPlayer.Name = world.Recipes[i].outputItems[0].Name;
+                                                        player.Inventory[x, y].Count -= (world.Recipes[i].inputItems[_i].Count * amount);
+                                                        if (player.Inventory[x, y].Count == 0)
+                                                        {
+                                                            player.Inventory[x, y] = null;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            bool itemExists = false;
+                            while(givetoPlayer != null)
+                            {
+                                Console.WriteLine($"{givetoPlayer.Name} othername: {givetoPlayer.Block.Name} yes: {givetoPlayer}");
+                                for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                                {
+                                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                                    {
+                                        if (player.Inventory[x,y] != null)
+                                        {
+                                            if (player.Inventory[x, y].Block.Name == givetoPlayer.Block.Name)
+                                            {
+                                                itemExists = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                Console.WriteLine(itemExists);
+                                int LIMIT = givetoPlayer.Count;
+                                for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                                {
+                                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                                    {
+                                        if (itemExists)
+                                        {
+                                            if (player.Inventory[x, y] != null)
+                                            {
+                                                if (player.Inventory[x, y].Block.Name == givetoPlayer.Block.Name)
+                                                {
+                                                    for (int i = 0; i < amount; i++)
+                                                    {
+                                                        for (int remaining = 0; remaining < LIMIT; remaining++)
+                                                        {
+                                                            player.Inventory[x, y].Count++;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (givetoPlayer != null)
+                                        {
+                                            if (player.Inventory[x, y] == null)
+                                            {
+                                                player.Inventory[x, y] = new Item(givetoPlayer.Block, "block", 0);
+                                                Console.WriteLine(player.Inventory[x,y].Block.Name);
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                            for (int i = 0; i < amount; i++)
+                                            {
+                                                for (int remaining = 0; remaining < LIMIT; remaining++)
+                                                {
+                                                    if (player.Inventory[x, y] == null)
+                                                    {
+                                                        player.Inventory[x, y] = new Item(givetoPlayer.Block, "block", givetoPlayer.Count);
+                                                        player.Inventory[x, y].Name = craftItem;
+                                                        Console.WriteLine($"{player.Inventory[x,y].Block.Name}");
+                                                    }
+                                                    else
+                                                    {
+                                                        player.Inventory[x, y].Count++;
+                                                    }
+                                                }
+                                            }
+                                            givetoPlayer = null;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            await Display(message.Author.Id, message, true);
         }
         public async Task SwapItems(char item1, char item2, ulong ID, SocketMessage message)
         {
@@ -532,7 +660,7 @@ namespace BigTry64
     [Serializable]
     public class Player : BaseMob
     {
-        public Player(int _X, int _Y, ulong _UserID, string _World, string _FilePath)
+        public Player(int _X, int _Y, ulong _UserID, string _World, string _FilePath, bool _craftingstation = false, bool _furnacestation = false)
         {
             X = _X;
             Y = _Y;
@@ -543,6 +671,8 @@ namespace BigTry64
         }
         public int HotBar;
         public ulong UserID;
+        public bool craftingstation;
+        public bool furnacestation;
     }
 
     [Serializable]

@@ -95,17 +95,29 @@ namespace BigTry64
                 _y--;
             }
             int x2 = 0;
+            player.craftingstation = false;
+            player.furnacestation = false;
             for (int x = _x-10; x < _x+10; x++)
             {
                 int y2 = 0;
                 for (int y = _y-8; y < _y+7; y++)
                 {
+
                     block = (Bitmap)Image.FromFile(world.Blocks[x, y].FilePath);
                     graphics.DrawImage(block, x2 * 32, y2 * 32);
                     foreach (var item in TempMobs)
                     {
                         if (item.X == x && item.Y == y)
                         {
+                            if (item.Name == "craftingstation")
+                            {
+                                player.craftingstation = true;
+                            }
+                            if (item.Name == "furnacestation")
+                            {
+                                player.furnacestation = true;
+                            }
+
                             block = (Bitmap)Image.FromFile(item.FilePath);
                             graphics.DrawImage(block, x2 * 32, y2 * 32);
                             block.Dispose();
@@ -168,15 +180,76 @@ namespace BigTry64
             }
             else if (crafting)
             {
-                Bitmap INV = (Bitmap)Image.FromFile(@"images/BT_inventory.png");
-                int StartX = (viewFrame.Width / 2) - ((INV.Width * 2) / 2);
-                int StartY = (int)((viewFrame.Height / 1.2f) - (INV.Height * 1.5f));
+                Bitmap outputimg;
+                Bitmap INV = (Bitmap)Image.FromFile(@"images/BT_invslot.png");
+                int StartX = 2; //(viewFrame.Width / 2) - ((INV.Width * 2) / 2);
+                int StartY = 2; //(int)((viewFrame.Height / 1.2f) - (INV.Height * 1.5f));
 
-                for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                Font f = new Font("Comic Sans MS", 16);
+                SolidBrush b = new SolidBrush(Color.White);
+
+                for (int i = 0; i < world.Recipes.Length; i++)
                 {
-                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                    if (world.Recipes[i].craftingHandler == "craftingStation" && !player.craftingstation)
                     {
+                        break;
+                    }
+                    if (world.Recipes[i].craftingHandler == "furnaceStation" && !player.furnacestation)
+                    {
+                        break;
+                    }
+                    for (int _i = 0; _i < world.Recipes[i].inputItems.Length; _i++)
+                    {
+                        for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                        {
+                            for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                            {
+                                if (player.Inventory[x, y] != null)
+                                {
+                                    if (player.Inventory[x, y].Name == world.Recipes[i].inputItems[_i].Name || player.Inventory[x, y].Name == world.Recipes[i].inputItems[_i].Block.Name)
+                                    {
+                                        if (player.Inventory[x, y].Count >= world.Recipes[i].inputItems[_i].Count)
+                                        {
+                                            //Console.WriteLine($"{world.Recipes[i].outputItems[0].Block.Name} is craftable");
+                                            Console.WriteLine($"{world.Recipes[i].outputItems[0].Block.FilePath} othername:  {world.Recipes[i].outputItems[0].FilePath}");
+                                            Console.WriteLine($"currently checking recipe {world.Recipes[i].outputItems[0].Block.Name}");
+                                            try
+                                            {
+                                                outputimg = (Bitmap)Image.FromFile(world.Recipes[i].outputItems[0].Block.FilePath);
+                                            }
+                                            catch
+                                            {
+                                                try
+                                                {
+                                                    outputimg = (Bitmap)Image.FromFile(world.Recipes[i].outputItems[0].FilePath);
+                                                }
+                                                catch
+                                                {
+                                                    outputimg = (Bitmap)Image.FromFile(@"images/error.png");
+                                                }
+                                            }
 
+                                            int X = StartX + (16 + (64 * 2));
+                                            int Y = StartY + (16 + (64 * 2)* i/2);
+
+                                            graphics.DrawImage(INV, X, Y, 64, 64);
+                                            graphics.DrawImage(outputimg, X + 16, Y + 8, 32, 32);
+                                            if (world.Recipes[i].outputItems[0].Count > 1)
+                                            {
+                                                graphics.DrawString(world.Recipes[i].outputItems[0].Block.Name, f, b, (X + 8) - world.Recipes[i].outputItems[0].Block.Name.Length, Y + 32);
+                                                graphics.DrawString($"{world.Recipes[i].outputItems[0].Count}", f, b, (X + 40) - world.Recipes[i].outputItems[0].Block.Name.Length, Y + 20);
+                                            }
+                                            else
+                                            {
+                                                graphics.DrawString(world.Recipes[i].outputItems[0].Block.Name, f, b, (X + 8) - world.Recipes[i].outputItems[0].Block.Name.Length, Y + 32);
+                                            }
+                                        }
+                                    }
+                                    //Console.WriteLine($"Player has {player.Inventory[x,y].Count} of {player.Inventory[x,y].Block.Name}");
+                                    //Console.WriteLine($"{world.Recipes[i].inputItems[_i].Count} of {world.Recipes[i].inputItems[_i].Block.Name} required for {world.Recipes[i].outputItems[0].Block.Name}");
+                                }
+                            }
+                        }
                     }
                 }
             }
