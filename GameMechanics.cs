@@ -499,6 +499,7 @@ namespace BigTry64
                                             {
                                                 if (player.Inventory[x, y].Block.Name == world.Recipes[i].inputItems[_i].Block.Name || player.Inventory[x, y].Block.Name == world.Recipes[i].inputItems[_i].Name)
                                                 {
+                                                    Console.WriteLine($"{player.Inventory[x, y].Count} {world.Recipes[i].inputItems[_i].Count * amount}");
                                                     while (player.Inventory[x, y].Count < (world.Recipes[i].inputItems[_i].Count * amount))
                                                     {
                                                         amount--;
@@ -520,78 +521,117 @@ namespace BigTry64
                                 }
                             }
                             
-                            bool itemExists = false;
                             while(givetoPlayer != null)
                             {
-                                Console.WriteLine($"{givetoPlayer.Name} othername: {givetoPlayer.Block.Name} yes: {givetoPlayer}");
-                                for (int x = 0; x < player.Inventory.GetLength(0); x++)
-                                {
-                                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
-                                    {
-                                        if (player.Inventory[x,y] != null)
-                                        {
-                                            if (player.Inventory[x, y].Block.Name == givetoPlayer.Block.Name)
-                                            {
-                                                itemExists = true;
-                                            }
-                                        }
-                                    }
-                                }
-                                Console.WriteLine(itemExists);
+                                Console.WriteLine($"amount {amount} ");
+                                #region rune gay
+                                //Console.WriteLine($"{givetoPlayer.Name} othername: {givetoPlayer.Block.Name} yes: {givetoPlayer}");
+                                //for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                                //{
+                                //    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                                //    {
+                                //        if (player.Inventory[x,y] != null)
+                                //        {
+                                //            if (player.Inventory[x, y].Block.Name == givetoPlayer.Block.Name)
+                                //            {
+                                //                itemExists = true;
+                                //            }
+                                //        }
+                                //    }
+                                //}
+                                //Console.WriteLine(itemExists);
+                                #endregion
                                 int LIMIT = givetoPlayer.Count;
                                 for (int x = 0; x < player.Inventory.GetLength(0); x++)
                                 {
                                     for (int y = 0; y < player.Inventory.GetLength(1); y++)
                                     {
-                                        if (itemExists)
+                                        if (player.Inventory[x, y] != null)
                                         {
-                                            if (player.Inventory[x, y] != null)
+                                            while (player.Inventory[x, y].Block.Name == givetoPlayer.Block.Name && player.Inventory[x, y].Count + LIMIT <= 50 && amount != 0)
                                             {
-                                                if (player.Inventory[x, y].Block.Name == givetoPlayer.Block.Name)
-                                                {
-                                                    for (int i = 0; i < amount; i++)
-                                                    {
-                                                        for (int remaining = 0; remaining < LIMIT; remaining++)
-                                                        {
-                                                            player.Inventory[x, y].Count++;
-                                                        }
-                                                    }
-                                                }
+                                                player.Inventory[x, y].Count += LIMIT;
+                                                amount--;
                                             }
-                                        }
-                                        else if (givetoPlayer != null)
-                                        {
-                                            if (player.Inventory[x, y] == null)
+                                            if (amount != 0)
                                             {
-                                                player.Inventory[x, y] = new Item(givetoPlayer.Block, "block", 0);
-                                                Console.WriteLine(player.Inventory[x,y].Block.Name);
-                                            }
-                                            else
-                                            {
+                                                x = 0;
                                                 break;
                                             }
-                                            for (int i = 0; i < amount; i++)
+                                        }
+                                        #region rune gay
+                                        //if (itemExists)
+                                        //{
+                                        //    if (player.Inventory[x, y] != null)
+                                        //    {
+                                        //        if (player.Inventory[x, y].Block.Name == givetoPlayer.Block.Name)
+                                        //        {
+                                        //            for (int i = 0; i < amount; i++)
+                                        //            {
+                                        //                for (int remaining = 0; remaining < LIMIT; remaining++)
+                                        //                {
+                                        //                    player.Inventory[x, y].Count++;
+                                        //                }
+                                        //            }
+                                        //        }
+                                        //    }
+                                        //}
+                                        //else if (givetoPlayer != null)
+                                        //{
+                                        //    if (player.Inventory[x, y] == null)
+                                        //    {
+                                        //        player.Inventory[x, y] = new Item(givetoPlayer.Block, "block", 0);
+                                        //        Console.WriteLine(player.Inventory[x,y].Block.Name);
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        break;
+                                        //    }
+                                        //    for (int i = 0; i < amount; i++)
+                                        //    {
+                                        //        for (int remaining = 0; remaining < LIMIT; remaining++)
+                                        //        {
+                                        //            if (player.Inventory[x, y] == null)
+                                        //            {
+                                        //                player.Inventory[x, y] = new Item(givetoPlayer.Block, "block", givetoPlayer.Count);
+                                        //                player.Inventory[x, y].Name = craftItem;
+                                        //                Console.WriteLine($"{player.Inventory[x,y].Block.Name}");
+                                        //            }
+                                        //            else
+                                        //            {
+                                        //                player.Inventory[x, y].Count++;
+                                        //            }
+                                        //        }
+                                        //    }
+                                        //    givetoPlayer = null;
+                                        //}
+                                        #endregion
+                                    }
+                                }
+                                for (int x = 0; x < player.Inventory.GetLength(0); x++)
+                                {
+                                    for (int y = 0; y < player.Inventory.GetLength(1); y++)
+                                    {
+                                        if (player.Inventory[x, y] == null && amount != 0)
+                                        {
+                                            player.Inventory[x, y] = new Item(givetoPlayer.Block, "block", givetoPlayer.Count);
+                                            amount--;
+                                            while (amount != 0 && player.Inventory[x, y].Count + LIMIT <= 50)
                                             {
-                                                for (int remaining = 0; remaining < LIMIT; remaining++)
-                                                {
-                                                    if (player.Inventory[x, y] == null)
-                                                    {
-                                                        player.Inventory[x, y] = new Item(givetoPlayer.Block, "block", givetoPlayer.Count);
-                                                        player.Inventory[x, y].Name = craftItem;
-                                                        Console.WriteLine($"{player.Inventory[x,y].Block.Name}");
-                                                    }
-                                                    else
-                                                    {
-                                                        player.Inventory[x, y].Count++;
-                                                    }
-                                                }
+                                                player.Inventory[x, y].Count += LIMIT;
+                                                amount--;
                                             }
-                                            givetoPlayer = null;
+                                            if (amount != 0)
+                                            {
+                                                x = 0;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
-                                break;
+                            break;
                             }
+                        break;
                         }
                     }
                 }
